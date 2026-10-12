@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radha Krishna | Divine Devotional Experience</title>
+  <meta name="description" content="Devotional hero section dedicated to Radha and Krishna featuring 3D depth typography with divine hands layered over texts, animated video background, Glass UI aesthetics, and directional hover stretch navigation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Main Hero Viewport -->
+  <main class="hero-container" id="hero">
+
+    <!-- Animating Peacock Feather & Twinkling Background Video -->
+    <div class="video-bg-container" id="videoBgContainer" aria-hidden="true">
+      <video 
+        id="bgVideo" 
+        class="bg-video" 
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+        preload="auto"
+      >
+        <source src="https://res.cloudinary.com/acggupzy/video/upload/v1791781565/Animating_feather_and_twinkling___20261012102408.mp4" type="video/mp4">
+      </video>
+      <!-- Atmospheric Glass Depth Vignette Overlay -->
+      <div class="video-vignette-overlay" id="videoOverlay"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="hero-header">
+      <!-- Left Navigation Links with Hover Stretch Move Directional Pill -->
+      <nav class="nav-links glass-nav" id="navLinks" aria-label="Main Navigation">
+        <!-- Dynamic Directional Stretch Move Glass Indicator -->
+        <div class="nav-stretch-pill" id="navStretchPill"></div>
+
+        <a href="#home" class="nav-item active" data-nav="home" data-index="0">
+          <span class="nav-text">HOME</span>
+        </a>
+        <a href="#about" class="nav-item" data-nav="about" data-index="1">
+          <span class="nav-text">ABOUT</span>
+        </a>
+        <a href="#leelas" class="nav-item" data-nav="leelas" data-index="2">
+          <span class="nav-text">LEELAS</span>
+        </a>
+        <a href="#darshan" class="nav-item" data-nav="darshan" data-index="3">
+          <span class="nav-text">DARSHAN</span>
+        </a>
+      </nav>
+
+      <!-- Center-Right Search Pill with Glass UI -->
+      <div class="search-pill-wrapper">
+        <div class="search-pill glass-card" id="searchPill">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="Search Leelas, Bhajans, Shlokas..." 
+            aria-label="Search"
+            autocomplete="off"
+          />
+          <button class="search-clear-btn" id="searchClearBtn" aria-label="Clear search" style="display: none;">
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Header Actions: Glass UI Video Toggle + Hamburger Menu -->
+      <div class="header-actions">
+        <!-- Glass UI Background Video Toggle Switch -->
+        <div class="glass-toggle-wrapper">
+          <button class="glass-toggle-btn active" id="bgVideoToggle" role="switch" aria-checked="true" aria-label="Toggle background animation" title="Toggle background video: Animated Feather & Stars vs Pure Black">
+            <span class="toggle-icon-wrap">
+              <svg class="toggle-icon icon-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </span>
+            <span class="toggle-label" id="toggleLabel">AMBIENT VIDEO</span>
+            <span class="toggle-switch-track">
+              <span class="toggle-switch-thumb"></span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Hamburger Menu Button -->
+        <button class="menu-toggle-btn glass-btn" id="menuToggleBtn" aria-label="Toggle navigation drawer" aria-expanded="false">
+          <span class="hamburger-line line-1"></span>
+          <span class="hamburger-line line-2"></span>
+          <span class="hamburger-line line-3"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Right Margin Vertical Indicator Rail -->
+    <aside class="right-rail glass-card" aria-label="Page Section Progress">
+      <div class="rail-track">
+        <div class="rail-segment active" data-step="1" title="01 • Divine Love"></div>
+        <div class="rail-segment" data-step="2" title="02 • Sacred Flute"></div>
+        <div class="rail-segment" data-step="3" title="03 • Bhagavad Gita"></div>
+        <div class="rail-segment" data-step="4" title="04 • Maha Mantra"></div>
+      </div>
+      <span class="rail-counter" id="railCounter">01 / 04</span>
+    </aside>
+
+    <!-- Center 3D Depth Typography & Foreground Divine Hands Stage -->
+    <section class="hero-center-content" id="heroCenterStage">
+      <div class="depth-hero-stage" id="depthStage">
+        
+        <!-- Background Layer: Main Title "RADHA KRISHNA" (layered behind hands) -->
+        <div class="title-layer-behind" id="titleLayer">
+          <h1 class="main-title" id="mainTitle">
+            <span class="title-word word-radha">RADHA</span>
+            <span class="title-word word-krishna">KRISHNA</span>
+            <sup class="title-badge glass-badge" title="Divine Supreme Absolute">ॐ</sup>
+          </h1>
+        </div>
+
+        <!-- Foreground Depth Layer: Divine Hands OVER the Texts -->
+        <div class="foreground-hands-wrap" id="foregroundHandsWrap" aria-hidden="true">
+          <img 
+            src="assets/krishna_divine_hands.png" 
+            alt="Divine Hands of Lord Krishna Playing Flute" 
+            class="divine-hands-img"
+            id="divineHandsImg"
+            draggable="false"
+          />
+        </div>
+
+        <!-- Subtitle Layer (anchored directly underneath) -->
+        <div class="subtitle-wrap" id="subTitleWrap">
+          <p class="subtitle" id="subTitle">
+            THE SUPREME EMBODIMENT OF ETERNAL LOVE
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Bottom Tagline & Call-To-Action Area -->
+    <footer class="hero-bottom">
+      <div class="tagline-container glass-card">
+        <p class="quote-text" id="quoteText">
+          "Wherever there is Krishna and Radha, there is eternal grace, supreme joy, and unconditional love."
+        </p>
+        <span class="quote-source" id="quoteSource">— Shrimad Bhagavatam &amp; Gita Wisdom</span>
+      </div>
+
+      <!-- Interactive Emblem / Call-To-Action Center Anchor -->
+      <div class="bottom-action-group">
+        <div class="cta-buttons">
+          <button class="btn btn-secondary glass-btn" id="chantsBtn">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+            <span>SACRED CHANTS</span>
+          </button>
+
+          <!-- Center Circular Emblem / Flute Harmony Player (Reference Spider logo position) -->
+          <button class="emblem-btn glass-emblem" id="emblemBtn" aria-label="Play Divine Flute Harmony" title="Click to play / pause divine Bansuri flute harmony">
+            <div class="emblem-ring"></div>
+            <div class="emblem-icon-wrap">
+              <!-- Sacred Flute & Peacock Feather Icon -->
+              <svg class="emblem-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer halo -->
+                <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.6"/>
+                <!-- Flute -->
+                <line x1="8" y1="28" x2="32" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <!-- Flute finger holes -->
+                <circle cx="16" cy="22.7" r="1" fill="currentColor"/>
+                <circle cx="20" cy="20" r="1" fill="currentColor"/>
+                <circle cx="24" cy="17.3" r="1" fill="currentColor"/>
+                <circle cx="28" cy="14.7" r="1" fill="currentColor"/>
+                <!-- Peacock feather crest feather plume -->
+                <path d="M12 25C10 20 12 14 18 10C22 7 27 8 28 11C29 14 24 18 19 20" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+                <ellipse cx="22" cy="12" rx="3.5" ry="2" transform="rotate(-30 22 12)" fill="currentColor" opacity="0.7"/>
+              </svg>
+            </div>
+            <span class="audio-status-pill" id="audioStatusText">FLUTE</span>
+          </button>
+
+          <button class="btn btn-primary glass-primary-btn" id="darshanBtn">
+            <span>ENTER DARSHAN</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Slide / Drawer Navigation Menu Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay" aria-hidden="true">
+      <div class="drawer-panel glass-drawer" id="drawerPanel">
+        <div class="drawer-header">
+          <div class="drawer-logo">
+            <span class="om-symbol">ॐ</span>
+            <span>DIVINE PORTAL</span>
+          </div>
+          <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close drawer">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <nav class="drawer-nav">
+          <a href="#home" class="drawer-link active" data-slide="0">
+            <span class="drawer-num">01</span>
+            <span class="drawer-title">HOME (SWAGATAM)</span>
+          </a>
+          <a href="#about" class="drawer-link" data-slide="1">
+            <span class="drawer-num">02</span>
+            <span class="drawer-title">THE DIVINE COUPLE</span>
+          </a>
+          <a href="#leelas" class="drawer-link" data-slide="2">
+            <span class="drawer-num">03</span>
+            <span class="drawer-title">SACRED VRINDAVAN LEELAS</span>
+          </a>
+          <a href="#gita" class="drawer-link" data-slide="3">
+            <span class="drawer-num">04</span>
+            <span class="drawer-title">BHAGAVAD GITA TEACHINGS</span>
+          </a>
+          <a href="#darshan" class="drawer-link" data-slide="4">
+            <span class="drawer-num">05</span>
+            <span class="drawer-title">TEMPLE &amp; DAILY DARSHAN</span>
+          </a>
+          <a href="#bhajans" class="drawer-link" data-slide="5">
+            <span class="drawer-num">06</span>
+            <span class="drawer-title">BHAJANS &amp; KIRTAN</span>
+          </a>
+        </nav>
+
+        <div class="drawer-footer">
+          <p class="drawer-mantra">
+            "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे ।<br>
+            हरे राम हरे राम राम राम हरे हरे ॥"
+          </p>
+          <div class="drawer-actions">
+            <button class="btn btn-secondary btn-full glass-btn" id="drawerMahaMantraBtn">COPY MAHA-MANTRA</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sacred Chants Modal -->
+    <div class="modal-backdrop" id="chantsModal" aria-hidden="true">
+      <div class="modal-card glass-modal">
+        <div class="modal-header">
+          <h3>SACRED MANTRAS &amp; CHANTS</h3>
+          <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="mantra-card glass-card">
+            <h4>Maha Mantra</h4>
+            <p class="sanskrit">हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे | हरे राम हरे राम राम राम हरे हरे ||</p>
+            <p class="translation">"O Lord Krishna, O Energy of the Lord (Hara/Radha), please engage me in Your transcendental loving service."</p>
+          </div>
+          <div class="mantra-card glass-card">
+            <h4>Radha Gayatri Mantra</h4>
+            <p class="sanskrit">ॐ वृषभानुजायै विद्महे कृष्णप्रियायै धीमहि तन्नो राधा प्रचोदयात् ||</p>
+            <p class="translation">"May the daughter of King Vrishabhanu and the beloved of Krishna illuminate our intellect and guide our spiritual path."</p>
+          </div>
+          <div class="mantra-card glass-card">
+            <h4>Krishna Shloka (Bhagavad Gita 4.7)</h4>
+            <p class="sanskrit">यदा यदा हि धर्मस्य ग्लानिर्भवति भारत | अभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम् ||</p>
+            <p class="translation">"Whenever virtue subsides and wickedness prevails, I manifest Myself on earth."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Toast Notification -->
+    <div class="toast glass-toast" id="toast" role="status" aria-live="polite"></div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
