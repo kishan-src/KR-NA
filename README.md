@@ -103,11 +103,11 @@ No build tools, bundlers, or package installations are required! This project ru
 ### Option A: Open Directly in Browser
 1. Clone this repository or download the ZIP:
    ```bash
-   git clone https://github.com/kishan-src/krishna-web-portal.git
+   git clone https://github.com/kishan-src/KR-NA.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd krishna-web-portal
+   cd KR-NA
    ```
 3. Double-click `index.html` to launch it directly in your favorite modern browser (Chrome, Edge, Firefox, Safari, Brave).
 
@@ -171,9 +171,9 @@ Open your browser and navigate to `http://localhost:8000`.
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!  
-Feel free to check the [issues page](https://github.com/kishan-src/krishna-web-portal/issues) to suggest ideas, report bugs, or submit pull requests.
+Feel free to check the [issues page](https://github.com/kishan-src/KR-NA/issues) to suggest ideas, report bugs, or submit pull requests.
 
-1. Fork the Project (`gh repo fork kishan-src/krishna-web-portal`)
+1. Fork the Project (`gh repo fork kishan-src/KR-NA`)
 2. Create your Feature Branch (`git checkout -b feature/DivineFeature`)
 3. Commit your Changes (`git commit -m 'Add some DivineFeature'`)
 4. Push to the Branch (`git push origin feature/DivineFeature`)
