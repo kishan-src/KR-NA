@@ -624,6 +624,10 @@
    Responsive Adaptations
    ========================================================================== */
 @media (max-width: 900px) {
+  .glass-toggle-wrapper {
+    display: none !important;
+  }
+
   .creator-layout {
     grid-template-columns: 1fr;
     text-align: center;
