@@ -1,0 +1,1212 @@
+/**
+ * Dedicated Controller for Sri Krishna Leelas Chronicle Page (leelas.html)
+ * Features:
+ * - 50 Transcendental Leelas illustrated across 6 separate chapters + "All Leelas" view
+ * - Primary Language: Hindi | English translation directly below each line
+ * - Interactive Chapter Tabs & Pagination Navigation
+ * - Custom Divine Flute & White Dot Text Cursor
+ * - Divine Bansuri Flute Audio Player
+ * - Smooth scroll & page transitions
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  // --- Toast Notification Helper ---
+  const toast = document.getElementById('toast');
+  let toastTimer = null;
+  function showToast(message) {
+    if (!toast) return;
+    if (toastTimer) clearTimeout(toastTimer);
+    toast.textContent = message;
+    toast.classList.add('show');
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2800);
+  }
+
+  // ==========================================================================
+  // Custom Divine Inverted Peacock Feather & White Dot Text Cursor Controller
+  // ==========================================================================
+  function createWaterRipple(x, y) {
+    const ripple = document.createElement('div');
+    ripple.className = 'water-submerge-ripple';
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+
+    ripple.innerHTML = `
+      <span class="water-drop-impact"></span>
+      <span class="water-ripple-wave wave-1"></span>
+      <span class="water-ripple-wave wave-2"></span>
+      <span class="water-ripple-wave wave-3"></span>
+    `;
+
+    document.body.appendChild(ripple);
+
+    setTimeout(() => {
+      ripple.remove();
+    }, 850);
+  }
+
+  function initCustomCursor() {
+    const customCursor = document.getElementById('customCursor');
+    if (!customCursor) return;
+
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      return;
+    }
+
+    let isVisible = false;
+
+    function isTextElement(target) {
+      if (!target) return false;
+      const isInteractive = target.closest(
+        'button, a, input, select, textarea, [role="button"], [role="switch"], .btn, .emblem-btn, .leela-page-tab, .page-arrow-btn, .back-home-btn'
+      );
+      if (isInteractive) return false;
+
+      const textTags = 'h1, h2, h3, h4, h5, h6, p, blockquote, .leela-hindi, .leela-english, .leela-title-hindi, .leela-title-english, .leelas-intro-hindi, .leelas-intro-english, .leelas-page-main-title, .leelas-page-sub-title, .om-symbol, span.stat-label, span.stat-num';
+      return !!target.closest(textTags);
+    }
+
+    function isInteractiveElement(target) {
+      if (!target) return false;
+      return !!target.closest('button, a, input, select, textarea, [role="button"], .btn, .emblem-btn, .leela-page-tab, .page-arrow-btn, .back-home-btn');
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      customCursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+
+      if (!isVisible) {
+        isVisible = true;
+        customCursor.classList.add('visible');
+      }
+
+      const target = document.elementFromPoint(e.clientX, e.clientY) || e.target;
+
+      if (isTextElement(target)) {
+        customCursor.classList.remove('cursor-mode-feather', 'cursor-interactive');
+        customCursor.classList.add('cursor-mode-dot');
+      } else {
+        customCursor.classList.remove('cursor-mode-dot');
+        customCursor.classList.add('cursor-mode-feather');
+
+        if (isInteractiveElement(target)) {
+          customCursor.classList.add('cursor-interactive');
+        } else {
+          customCursor.classList.remove('cursor-interactive');
+        }
+      }
+    });
+
+    window.addEventListener('mouseleave', () => {
+      isVisible = false;
+      customCursor.classList.remove('visible');
+    });
+
+    window.addEventListener('mouseenter', () => {
+      isVisible = true;
+      customCursor.classList.add('visible');
+    });
+
+    // Tactile press on click & trigger water droplet submerged ripple pulse
+    window.addEventListener('mousedown', (e) => {
+      customCursor.classList.add('clicking');
+      createWaterRipple(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('mouseup', () => {
+      customCursor.classList.remove('clicking');
+    });
+  }
+
+  initCustomCursor();
+
+  // ==========================================================================
+  // Divine Bansuri Flute Audio Player
+  // ==========================================================================
+  const FLUTE_AUDIO_URL = 'https://res.cloudinary.com/acggupzy/video/upload/v1791861453/WhatsApp_Audio_2026-10-12_at_6.56.35_PM.mp3';
+  let fluteAudio = document.getElementById('fluteAudio');
+  if (!fluteAudio) {
+    fluteAudio = new Audio(FLUTE_AUDIO_URL);
+    fluteAudio.id = 'fluteAudio';
+    fluteAudio.loop = true;
+    fluteAudio.preload = 'auto';
+  } else {
+    fluteAudio.loop = true;
+  }
+
+  const chakraAudioBtn = document.getElementById('chakraAudioBtn') || document.getElementById('leelasAudioBtn');
+  let isPlayingAudio = false;
+
+  // Initialize in resting posture
+  if (chakraAudioBtn) {
+    chakraAudioBtn.classList.add('stopped');
+    chakraAudioBtn.classList.remove('playing');
+  }
+
+  function toggleAudio() {
+    if (!isPlayingAudio) {
+      fluteAudio.volume = 0.85;
+      fluteAudio.play().then(() => {
+        isPlayingAudio = true;
+        if (chakraAudioBtn) {
+          chakraAudioBtn.classList.remove('stopped');
+          chakraAudioBtn.classList.add('playing');
+        }
+        showToast('♪ दिव्य बाँसुरी स्वर प्रारंभ');
+      }).catch(() => {
+        showToast('♪ Tap again to permit divine audio playback');
+      });
+    } else {
+      fluteAudio.pause();
+      isPlayingAudio = false;
+      if (chakraAudioBtn) {
+        chakraAudioBtn.classList.remove('playing');
+        chakraAudioBtn.classList.add('stopped');
+      }
+      showToast('♪ दिव्य बाँसुरी विराम');
+    }
+  }
+
+  if (chakraAudioBtn) {
+    chakraAudioBtn.addEventListener('click', toggleAudio);
+  }
+
+  // ==========================================================================
+  // Dynamic Cursor Spotlight Controller for Background Video (Same as Home Page)
+  // Lights up the background video wherever the user's cursor hovers
+  // ==========================================================================
+  const videoBgContainer = document.getElementById('videoBgContainer');
+  const bgVideo = document.getElementById('bgVideo');
+  const bgVideoToggle = document.getElementById('bgVideoToggle');
+  const toggleLabel = document.getElementById('toggleLabel');
+
+  if (bgVideo) {
+    bgVideo.play().catch(() => {});
+  }
+
+  function initVideoSpotlight() {
+    if (!videoBgContainer) return;
+
+    let spotTargetX = window.innerWidth / 2;
+    let spotTargetY = window.innerHeight / 2;
+    let spotCurrentX = window.innerWidth / 2;
+    let spotCurrentY = window.innerHeight / 2;
+    let isCursorInside = false;
+    let fadeOutTimeout = null;
+
+    function renderSpotlight() {
+      spotCurrentX += (spotTargetX - spotCurrentX) * 0.14;
+      spotCurrentY += (spotTargetY - spotCurrentY) * 0.14;
+
+      videoBgContainer.style.setProperty('--spot-x', `${spotCurrentX.toFixed(1)}px`);
+      videoBgContainer.style.setProperty('--spot-y', `${spotCurrentY.toFixed(1)}px`);
+
+      requestAnimationFrame(renderSpotlight);
+    }
+
+    requestAnimationFrame(renderSpotlight);
+
+    window.addEventListener('mousemove', (e) => {
+      spotTargetX = e.clientX;
+      spotTargetY = e.clientY;
+
+      if (!isCursorInside) {
+        isCursorInside = true;
+        if (fadeOutTimeout) clearTimeout(fadeOutTimeout);
+        videoBgContainer.classList.add('active-spotlight');
+        videoBgContainer.style.setProperty('--spot-opacity', '1');
+      }
+    });
+
+    window.addEventListener('mouseleave', () => {
+      isCursorInside = false;
+      videoBgContainer.style.setProperty('--spot-opacity', '0');
+      fadeOutTimeout = setTimeout(() => {
+        if (!isCursorInside) {
+          videoBgContainer.classList.remove('active-spotlight');
+        }
+      }, 400);
+    });
+
+    window.addEventListener('mouseenter', (e) => {
+      spotTargetX = e.clientX;
+      spotTargetY = e.clientY;
+      isCursorInside = true;
+      if (fadeOutTimeout) clearTimeout(fadeOutTimeout);
+      videoBgContainer.classList.add('active-spotlight');
+      videoBgContainer.style.setProperty('--spot-opacity', '1');
+    });
+  }
+
+  initVideoSpotlight();
+
+  // Glass UI Background Video Toggle Switch (Ambient Video <-> Pure Black)
+  let isVideoBgActive = true;
+  if (bgVideoToggle) {
+    bgVideoToggle.addEventListener('click', () => {
+      isVideoBgActive = !isVideoBgActive;
+
+      if (isVideoBgActive) {
+        bgVideoToggle.classList.add('active');
+        bgVideoToggle.setAttribute('aria-checked', 'true');
+        videoBgContainer.classList.remove('hidden');
+        if (toggleLabel) toggleLabel.textContent = 'AMBIENT VIDEO';
+        if (bgVideo) bgVideo.play().catch(() => {});
+        showToast('✨ Celestial Feather Video Background: Enabled');
+      } else {
+        bgVideoToggle.classList.remove('active');
+        bgVideoToggle.setAttribute('aria-checked', 'false');
+        videoBgContainer.classList.add('hidden');
+        if (toggleLabel) toggleLabel.textContent = 'BLACK CANVAS';
+        if (bgVideo) bgVideo.pause();
+        showToast('🌑 Minimalist Pure Black Canvas: Enabled');
+      }
+    });
+  }
+
+  // ==========================================================================
+  // Sacred Krishna Leelas Dataset (50 Illustrated Pastimes)
+  // ==========================================================================
+  const KRISHNA_LEELAS = [
+  {
+    "id": 1,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "1",
+    "titleHindi": "1. श्री कृष्ण प्राकट्य एवं चतुर्भुज दर्शन",
+    "titleEnglish": "1. Divine Appearance & Four-Armed Form",
+    "hindi": "भाद्रपद कृष्ण अष्टमी की आधी रात को कारागार में भगवान विष्णु अपने शंख, चक्र, गदा और पद्म युक्त चतुर्भुज दिव्य रूप में माता देवकी और पिता वसुदेव के समक्ष प्रकट हुए और धर्म स्थापना का संदेश दिया।",
+    "english": "At midnight on Krishna Janmashtami in Mathura prison, Lord Vishnu appeared in His four-armed divine form before Devaki and Vasudeva, declaring His advent to re-establish righteousness and protect the virtuous.",
+    "icon": "vishnu_avatar",
+    "theme": "midnight",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_1\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#080C1B\"/>\n          <stop offset=\"60%\" stop-color=\"#1C2442\"/>\n          <stop offset=\"100%\" stop-color=\"#080C1B\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_1\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#4B6CB7\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_1)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_1)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F0CB7D\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F0CB7D\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F0CB7D\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#080C1B\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#080C1B\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#080C1B\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#4B6CB7\" stroke-width=\"1.8\" fill=\"#4B6CB7\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F0CB7D\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#080C1B\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 2,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "2",
+    "titleHindi": "2. यमुना पार व गोकुल गमन लीला",
+    "titleEnglish": "2. Crossing the Fierce Yamuna & Journey to Gokul",
+    "hindi": "वसुदेव जी ने नवजात शिशु कृष्ण को सूप में रखकर उफनती यमुना पार की, जहाँ शेषनाग ने जलवृष्टि से रक्षा की और यमुना जी ने प्रभु के चरण छूकर मार्ग प्रशस्त किया।",
+    "english": "Vasudeva carried infant Krishna across the tempestuous River Yamuna in a wicker basket, shielded by Sheshnag's divine hood while the sacred river bowed to touch the Lord's lotus feet.",
+    "icon": "yamuna_sheshnag",
+    "theme": "storm_yamuna",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_2\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#03101E\"/>\n          <stop offset=\"60%\" stop-color=\"#0B3C5D\"/>\n          <stop offset=\"100%\" stop-color=\"#03101E\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_2\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#55E6C1\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#1D2731\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_2)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_2)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#55E6C1\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#55E6C1\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#55E6C1\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#03101E\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#03101E\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#03101E\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#1D2731\" stroke-width=\"1.8\" fill=\"#1D2731\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#55E6C1\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#03101E\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 3,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "3",
+    "titleHindi": "3. पूतना उद्धार / पूतना मोक्ष",
+    "titleEnglish": "3. Deliverance and Liberation of Demoness Putana",
+    "hindi": "स्तन में कालकूट विष लगाकर वध करने आई राक्षसी पूतना का दुग्ध पान करते हुए बाल कृष्ण ने उसके प्राणों का उद्धार किया और उसे धात्री माता का परम पद प्रदान किया।",
+    "english": "Infant Krishna drank the lethal poison-smeared milk along with the life breath of demoness Putana, bestowing upon her the supreme transcendental position of a loving foster mother.",
+    "icon": "putana_moksha",
+    "theme": "mystic_purple",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_3\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#150921\"/>\n          <stop offset=\"60%\" stop-color=\"#3B185F\"/>\n          <stop offset=\"100%\" stop-color=\"#150921\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_3\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#E056FD\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FFBE76\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_3)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_3)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#E056FD\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#E056FD\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#E056FD\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#150921\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#150921\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#150921\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FFBE76\" stroke-width=\"1.8\" fill=\"#FFBE76\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#E056FD\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#150921\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 4,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "4",
+    "titleHindi": "4. शकटासुर भंजन लीला",
+    "titleEnglish": "4. Shattering the Cart Demon Shakatasura",
+    "hindi": "पालने में लेटे नटखट बाल मुकुंद ने रोते हुए अपने कोमल चरण कमल से छद्मवेशी गाड़ी रूपी शकटासुर पर प्रहार किया और उसे चकनाचूर कर उद्धार किया।",
+    "english": "While resting beneath a household cart, baby Krishna playfully kicked the disguised cart-demon Shakatasura with His tender lotus foot, shattering it into pieces.",
+    "icon": "shakatasura_cart",
+    "theme": "warm_earth",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_4\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1C1008\"/>\n          <stop offset=\"60%\" stop-color=\"#4A2810\"/>\n          <stop offset=\"100%\" stop-color=\"#1C1008\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_4\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F39C12\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F1C40F\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_4)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_4)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F39C12\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F39C12\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F39C12\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1C1008\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1C1008\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1C1008\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F1C40F\" stroke-width=\"1.8\" fill=\"#F1C40F\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F39C12\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1C1008\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 5,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "5",
+    "titleHindi": "5. तृणावर्त वध / बवंडर मुक्ति",
+    "titleEnglish": "5. Slaying the Whirlwind Demon Trinavarta",
+    "hindi": "भयंकर बवंडर बनकर नन्हे कान्हा को आकाश में उड़ा ले जाने वाले असुर तृणावर्त का भार बढ़ाकर प्रभु ने उसकी ग्रीवा पकड़कर उसे मुक्ति प्रदान की।",
+    "english": "When the whirlwind demon Trinavarta swept little Krishna into the sky, the Lord expanded His cosmic weight, gripped the demon's throat, and vanquished him to the ground.",
+    "icon": "trinavarta_whirlwind",
+    "theme": "golden_sky",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_5\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1C1405\"/>\n          <stop offset=\"60%\" stop-color=\"#5C3D10\"/>\n          <stop offset=\"100%\" stop-color=\"#1C1405\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_5\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F1C40F\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#E67E22\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_5)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_5)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F1C40F\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F1C40F\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F1C40F\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1C1405\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1C1405\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1C1405\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#E67E22\" stroke-width=\"1.8\" fill=\"#E67E22\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F1C40F\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1C1405\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 6,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "6",
+    "titleHindi": "6. नामकरण संस्कार लीला",
+    "titleEnglish": "6. Sacred Naming Ceremony by Sage Garga",
+    "hindi": "यदुवंश के कुलगुरु महर्षि गर्गाचार्य ने नंद बाबा की गोशाला में रोहिणी नंदन का नाम 'राम' और यशोदा नंदन का नाम 'कृष्ण' (सर्व-आकर्षक परमानंद) रखा।",
+    "english": "Sage Gargacharya conducted the secretive naming ceremony in Nanda Baba's cowshed, christening Rohini's son 'Rama' (Balarama) and Yashoda's dark son 'Krishna'—the All-Attractive Divine Joy.",
+    "icon": "naming_ceremony",
+    "theme": "sacred_fire",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_6\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1C0705\"/>\n          <stop offset=\"60%\" stop-color=\"#4A1208\"/>\n          <stop offset=\"100%\" stop-color=\"#1C0705\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_6\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#FF4757\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FFA502\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_6)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_6)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#FF4757\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#FF4757\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#FF4757\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1C0705\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1C0705\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1C0705\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FFA502\" stroke-width=\"1.8\" fill=\"#FFA502\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#FF4757\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1C0705\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 7,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "7",
+    "titleHindi": "7. माखन चोरी लीला",
+    "titleEnglish": "7. Makhan Chori - The Celestial Butter Thief",
+    "hindi": "गोपियों की छींकों से माखन चुराना, सखाओं और वानरों को तृप्त करना और यशोदा मैया के सम्मुख भोलेपन से मुख पर माखन लपेटकर आनंद बिखेरना।",
+    "english": "Krishna stealthily stole freshly churned butter from hanging pots, generously fed His cowherd friends and forest monkeys, spreading infinite bliss through the courtyards of Gokul.",
+    "icon": "makhan_pot",
+    "theme": "butter_gold",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_7\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1B1202\"/>\n          <stop offset=\"60%\" stop-color=\"#4D3507\"/>\n          <stop offset=\"100%\" stop-color=\"#1B1202\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_7\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F9CA24\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F0932B\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_7)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_7)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F9CA24\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F9CA24\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F9CA24\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1B1202\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1B1202\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1B1202\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F0932B\" stroke-width=\"1.8\" fill=\"#F0932B\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F9CA24\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1B1202\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 8,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "8",
+    "titleHindi": "8. मुख में संपूर्ण ब्रह्मांड दर्शन / मिट्टी खाना",
+    "titleEnglish": "8. Universal Cosmic Vision in Mother Yashoda's Sight",
+    "hindi": "मिट्टी खाने के उलाहने पर जब मैया यशोदा ने मुख खोलने को कहा, तो बाल गोपाल ने अपने नन्हे मुख में चौदह भुवन, सूर्य, चंद्र, अग्नि, समुद्र और संपूर्ण ब्रह्मांड के दर्शन कराए।",
+    "english": "When Mother Yashoda checked His mouth for swallowed earth, baby Krishna revealed within His oral cavity all fourteen planetary systems, stars, oceans, time, and cosmic eternity.",
+    "icon": "cosmic_mouth",
+    "theme": "cosmic_nebula",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_8\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#050517\"/>\n          <stop offset=\"60%\" stop-color=\"#1E0B36\"/>\n          <stop offset=\"100%\" stop-color=\"#050517\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_8\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#6C5CE7\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#00CEC9\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_8)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_8)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#6C5CE7\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#6C5CE7\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#6C5CE7\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#050517\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#050517\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#050517\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#00CEC9\" stroke-width=\"1.8\" fill=\"#00CEC9\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#6C5CE7\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#050517\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 9,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "9",
+    "titleHindi": "9. दामोदर लीला / उखल बंधन",
+    "titleEnglish": "9. Damodara Leela - Bound by Unconditional Love",
+    "hindi": "मैया यशोदा ने जब कान्हा को रस्सी से ओखली से बांधने का यत्न किया तो रस्सी दो अंगुल छोटी पड़ती रही, जब तक कि प्रभु अपने भक्त के वात्सल्य प्रेम से स्वयं नहीं बंध गए।",
+    "english": "Mother Yashoda repeatedly found ropes falling two fingers short when trying to tie restless Krishna to a wooden mortar, until the Lord willingly allowed Himself to be bound by pure devotion.",
+    "icon": "damodara_mortar",
+    "theme": "tender_home",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_9\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#190E08\"/>\n          <stop offset=\"60%\" stop-color=\"#422513\"/>\n          <stop offset=\"100%\" stop-color=\"#190E08\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_9\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#E17055\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FDCB6E\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_9)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_9)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#E17055\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#E17055\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#E17055\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#190E08\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#190E08\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#190E08\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FDCB6E\" stroke-width=\"1.8\" fill=\"#FDCB6E\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#E17055\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#190E08\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 10,
+    "page": 1,
+    "category": "gokul",
+    "categoryHindi": "गोकुल लीला",
+    "categoryEnglish": "Gokul Leela",
+    "serialHindi": "10",
+    "titleHindi": "10. यमलार्जुन उद्धार लीला",
+    "titleEnglish": "10. Deliverance of Nalakuvara and Manigriva",
+    "hindi": "ओखली खींचते हुए दो विशाल यमलार्जुन वृक्षों के मध्य से निकलकर उन्हें धराशायी किया और कुबेर पुत्रों नलकूबर तथा मणिग्रीव को देवर्षि नारद के श्राप से मुक्त किया।",
+    "english": "Dragging the heavy wooden mortar between two giant twin Yamalarjuna trees, Krishna uprooted them, liberating Kuvera's proud sons Nalakuvara and Manigriva back to divine radiance.",
+    "icon": "yamalarjuna_trees",
+    "theme": "ancient_forest",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_10\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#0A1910\"/>\n          <stop offset=\"60%\" stop-color=\"#163E26\"/>\n          <stop offset=\"100%\" stop-color=\"#0A1910\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_10\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#2ED573\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F1C40F\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_10)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_10)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#2ED573\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#2ED573\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#2ED573\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#0A1910\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#0A1910\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#0A1910\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F1C40F\" stroke-width=\"1.8\" fill=\"#F1C40F\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#2ED573\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#0A1910\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 11,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "11",
+    "titleHindi": "11. पावन वृंदावन धाम गमन",
+    "titleEnglish": "11. Relocation to the Sacred Forest of Vrindavan",
+    "hindi": "गोकुल के उपद्रवों के पश्चात नंद बाबा और समस्त ब्रजवासियों ने यमुना तट पर स्थित मनोहर तुलसी वनों से सुशोभित वृंदावन धाम में अपनी नई बस्ती बसाई।",
+    "english": "Prompted by recurring demon threats, Nanda Baba and the cowherd community migrated to the serene, Tulsi-adorned groves of Vrindavan beside River Yamuna.",
+    "icon": "vrindavan_groves",
+    "theme": "emerald_forest",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_11\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#06170E\"/>\n          <stop offset=\"60%\" stop-color=\"#0F3822\"/>\n          <stop offset=\"100%\" stop-color=\"#06170E\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_11\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#00B894\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#55E6C1\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_11)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_11)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#00B894\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#00B894\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#00B894\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#06170E\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#06170E\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#06170E\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#55E6C1\" stroke-width=\"1.8\" fill=\"#55E6C1\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#00B894\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#06170E\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 12,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "12",
+    "titleHindi": "12. वत्सासुर वध लीला",
+    "titleEnglish": "12. Slaying the Deceitful Calf Demon Vatsasura",
+    "hindi": "बछड़े का रूप धारण कर गौ-समूह में घात लगाए असुर वत्सासुर को कान्हा ने पिछले पैरों से पकड़कर आकाश में घुमाते हुए कैथ के वृक्ष पर पटककर मुक्त किया।",
+    "english": "Krishna spotted the demon Vatsasura disguised as a gentle calf amongst the herd, seized him by his hind hooves, whirled him through the air, and freed his soul.",
+    "icon": "vatsasura_calf",
+    "theme": "pasture_green",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_12\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#0C190D\"/>\n          <stop offset=\"60%\" stop-color=\"#1D3D1F\"/>\n          <stop offset=\"100%\" stop-color=\"#0C190D\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_12\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#7BED9F\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#ECCC68\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_12)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_12)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#7BED9F\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#7BED9F\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#7BED9F\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#0C190D\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#0C190D\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#0C190D\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#ECCC68\" stroke-width=\"1.8\" fill=\"#ECCC68\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#7BED9F\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#0C190D\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 13,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "13",
+    "titleHindi": "13. बकासुर संहार लीला",
+    "titleEnglish": "13. Tearing the Colossal Crane Demon Bakasura",
+    "hindi": "विशाल बगुले के रूप में आए कंस के दूत बकासुर ने कृष्ण को निगल लिया, किंतु प्रभु के तेज से जलकर उसने उगल दिया और कान्हा ने उसकी चोंच फाड़कर वध किया।",
+    "english": "The gargantuan crane-demon Bakasura swallowed Krishna, but burned by the Lord's incandescent energy, spat Him out; Krishna then grabbed his beak with both hands and tore it apart.",
+    "icon": "bakasura_crane",
+    "theme": "riverbank_mist",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_13\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#071520\"/>\n          <stop offset=\"60%\" stop-color=\"#133852\"/>\n          <stop offset=\"100%\" stop-color=\"#071520\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_13\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#70A1FF\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#A4B0BE\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_13)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_13)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#70A1FF\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#70A1FF\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#70A1FF\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#071520\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#071520\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#071520\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#A4B0BE\" stroke-width=\"1.8\" fill=\"#A4B0BE\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#70A1FF\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#071520\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 14,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "14",
+    "titleHindi": "14. अघासुर उद्धार लीला",
+    "titleEnglish": "14. Deliverance of the Cosmic Serpent Aghasura",
+    "hindi": "आठ मील लंबे विशाल अजगर अघासुर के गुफा जैसे खुले मुख में प्रविष्ट होकर प्रभु ने अपना आकार बढ़ाया और उसके प्राणों को मुक्ति देकर ब्रह्म ज्योति में विलीन किया।",
+    "english": "When the giant serpent Aghasura trapped the cowherd boys in his yawning cave-like mouth, Krishna stepped inside, expanded His divine form, and ushered the demon's soul into the spiritual effulgence.",
+    "icon": "aghasura_serpent",
+    "theme": "cavern_deep",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_14\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#130A19\"/>\n          <stop offset=\"60%\" stop-color=\"#2D153B\"/>\n          <stop offset=\"100%\" stop-color=\"#130A19\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_14\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#A55EEA\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FD79A8\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_14)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_14)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#A55EEA\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#A55EEA\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#A55EEA\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#130A19\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#130A19\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#130A19\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FD79A8\" stroke-width=\"1.8\" fill=\"#FD79A8\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#A55EEA\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#130A19\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 15,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "15",
+    "titleHindi": "15. ब्रह्म-विमोहन / ब्रह्मा मोहन लीला",
+    "titleEnglish": "15. The Bewilderment and Awakening of Lord Brahma",
+    "hindi": "सृष्टिकर्ता ब्रह्मा जी द्वारा बछड़ों व सखाओं को चुरा लेने पर कृष्ण ने स्वयं समस्त ग्वालबालों, वस्त्रों और गौओं का अनंत रूप धारण कर एक वर्ष तक लीला संचालित की।",
+    "english": "When Brahma hid the calves and cowherd boys to test Krishna's divinity, the Lord expanded Himself into exact replicas of every boy and calf for an entire year until Brahma surrendered.",
+    "icon": "brahma_mohan",
+    "theme": "brahma_radiance",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_15\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1C1204\"/>\n          <stop offset=\"60%\" stop-color=\"#482D06\"/>\n          <stop offset=\"100%\" stop-color=\"#1C1204\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_15\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F1C40F\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FF7675\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_15)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_15)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F1C40F\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F1C40F\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F1C40F\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1C1204\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1C1204\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1C1204\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FF7675\" stroke-width=\"1.8\" fill=\"#FF7675\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F1C40F\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1C1204\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 16,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "16",
+    "titleHindi": "16. धेनुकासुर वध / तालवन लीला",
+    "titleEnglish": "16. Slaying of Dhenukasura in the Talavana Forest",
+    "hindi": "तालवन के मधुर फलों की रक्षा करने वाले गधे रूपी दैत्य धेनुकासुर को दाऊ भैया (बलराम जी) ने पैरों से पकड़कर ताड़ के वृक्षों पर फेंककर तालवन को भयमुक्त किया।",
+    "english": "In the sweet palm groves of Talavana, Lord Balarama grasped the belligerent donkey-demon Dhenukasura by his hind legs, tossed him into the treetops, and opened the forest to all.",
+    "icon": "dhenuka_palm",
+    "theme": "talavana_palms",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_16\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#0A1708\"/>\n          <stop offset=\"60%\" stop-color=\"#1A3B14\"/>\n          <stop offset=\"100%\" stop-color=\"#0A1708\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_16\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#2ED573\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FFA502\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_16)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_16)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#2ED573\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#2ED573\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#2ED573\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#0A1708\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#0A1708\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#0A1708\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FFA502\" stroke-width=\"1.8\" fill=\"#FFA502\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#2ED573\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#0A1708\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 17,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "17",
+    "titleHindi": "17. कालिया नाग दमन लीला",
+    "titleEnglish": "17. Subduing the Multi-Hooded Serpent Kaliya",
+    "hindi": "यमुना के विषैले दह में कूदकर कालिया नाग के फनों पर नटराज की भांति नृत्य किया, उसके अहंकार को चूर्ण कर यमुना जी को सदा के लिए विषमुक्त व अमृतमयी बनाया।",
+    "english": "Leaping into the boiling poisonous pool from a Kadamba bough, Krishna danced majestically upon the hundred jewel-crested hoods of serpent Kaliya, purifying the sacred Yamuna waters.",
+    "icon": "kaliya_dance",
+    "theme": "dark_waters",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_17\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#030E1A\"/>\n          <stop offset=\"60%\" stop-color=\"#082942\"/>\n          <stop offset=\"100%\" stop-color=\"#030E1A\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_17\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#00CEC9\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#0984E3\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_17)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_17)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#00CEC9\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#00CEC9\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#00CEC9\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#030E1A\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#030E1A\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#030E1A\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#0984E3\" stroke-width=\"1.8\" fill=\"#0984E3\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#00CEC9\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#030E1A\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 18,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "18",
+    "titleHindi": "18. दावाग्नि पान लीला",
+    "titleEnglish": "18. Swallowing the Raging Forest Conflagration",
+    "hindi": "मुंजारण्य वन में लगी भीषण दावानल की लपटों से भयभीत ग्वालबालों और गौओं को आंखें बंद करने को कहकर प्रभु ने समस्त अग्नि को एक घूंट में पी लिया।",
+    "english": "Surrounded by a terrifying wildfire in the Munja forest, Krishna asked His beloved companions to close their eyes and swallowed the towering inferno in a single breath.",
+    "icon": "davagni_fire",
+    "theme": "wildfire_blaze",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_18\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1D0602\"/>\n          <stop offset=\"60%\" stop-color=\"#4B0F04\"/>\n          <stop offset=\"100%\" stop-color=\"#1D0602\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_18\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#FF4757\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FF6B81\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_18)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_18)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#FF4757\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#FF4757\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#FF4757\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1D0602\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1D0602\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1D0602\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FF6B81\" stroke-width=\"1.8\" fill=\"#FF6B81\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#FF4757\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1D0602\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 19,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "19",
+    "titleHindi": "19. प्रलंबासुर वध लीला",
+    "titleEnglish": "19. Slaying of Demon Pralambasura by Balarama",
+    "hindi": "ग्वालबाल बनकर खेल में घुसे मायावी प्रलंबासुर ने जब बलराम जी को पीठ पर उठाकर भगाने का यत्न किया, तो बलराम जी ने अपनी मुष्टि के प्रहार से उसका मस्तक फोड़ दिया।",
+    "english": "Disguised as a cowherd during forest games, demon Pralambasura carried Balarama on his shoulders, but the mighty Lord struck his skull with a thunderous fist, slaying him.",
+    "icon": "pralamba_fist",
+    "theme": "warrior_might",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_19\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#170A1E\"/>\n          <stop offset=\"60%\" stop-color=\"#38194B\"/>\n          <stop offset=\"100%\" stop-color=\"#170A1E\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_19\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#9B59B6\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#3498DB\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_19)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_19)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#9B59B6\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#9B59B6\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#9B59B6\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#170A1E\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#170A1E\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#170A1E\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#3498DB\" stroke-width=\"1.8\" fill=\"#3498DB\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#9B59B6\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#170A1E\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 20,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "20",
+    "titleHindi": "20. चीर हरण / वस्त्र हरण लीला",
+    "titleEnglish": "20. Gopi Vastra Harana - The Surrender of False Modesty",
+    "hindi": "कात्यायनी देवी का व्रत करने वाली गोपियों के वस्त्र कदंब वृक्ष पर रखकर प्रभु ने उन्हें बाह्य आवरण और देहाभिमान त्यागकर परमात्मा के प्रति अनावृत शरणागति का ज्ञान दिया।",
+    "english": "Taking the garments of the Gopis observing the Katyayani vow, Krishna imparted the confidential spiritual truth of shedding all material coverings before the Supreme Lord.",
+    "icon": "chir_harana_tree",
+    "theme": "kadamba_sunrise",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_20\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#180D0E\"/>\n          <stop offset=\"60%\" stop-color=\"#421C20\"/>\n          <stop offset=\"100%\" stop-color=\"#180D0E\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_20\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#FF7675\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F9CA24\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_20)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_20)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#FF7675\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#FF7675\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#FF7675\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#180D0E\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#180D0E\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#180D0E\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F9CA24\" stroke-width=\"1.8\" fill=\"#F9CA24\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#FF7675\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#180D0E\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 21,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "21",
+    "titleHindi": "21. यज्ञ-पत्नियों पर अनुग्रह",
+    "titleEnglish": "21. Divine Grace upon the Wives of Ritualistic Priests",
+    "hindi": "कर्मकांडी अहंकारी ब्राह्मणों द्वारा भोजन न दिए जाने पर उनकी अनन्य भक्त पत्नियों ने कुल-मर्यादा भूलकर साक्षात परब्रह्म कृष्ण को अमृत तुल्य भोग समर्पित किया।",
+    "english": "When proud ritualistic Vedic priests turned away the hungry cowherds, their devoted wives cast aside social norms to personally bring sumptuous offerings directly to Krishna.",
+    "icon": "yajna_patni_feast",
+    "theme": "golden_offering",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_21\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1A1005\"/>\n          <stop offset=\"60%\" stop-color=\"#422B0B\"/>\n          <stop offset=\"100%\" stop-color=\"#1A1005\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_21\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F1C40F\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FFEAA7\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_21)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_21)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F1C40F\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F1C40F\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F1C40F\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1A1005\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1A1005\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1A1005\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FFEAA7\" stroke-width=\"1.8\" fill=\"#FFEAA7\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F1C40F\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1A1005\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 22,
+    "page": 2,
+    "category": "vrindavan",
+    "categoryHindi": "वृंदावन लीला",
+    "categoryEnglish": "Vrindavan Leela",
+    "serialHindi": "22",
+    "titleHindi": "22. गिरिराज गोवर्धन धारण लीला",
+    "titleEnglish": "22. Lifting Mount Govardhan on the Little Finger",
+    "hindi": "इंद्र के मानमर्दन हेतु गोवर्धन पूजा कराई और क्रुद्ध इंद्र के सात दिन-रात के मूसलाधार जल-प्रलय से ब्रज की रक्षा हेतु अपनी बायीं कनिष्ठिका पर गोवर्धन पर्वत धारण किया।",
+    "english": "To protect Vrindavan from Lord Indra's wrathful deluge, seven-year-old Krishna lifted Mount Govardhan on the tip of His left pinky finger for seven days and nights like an umbrella.",
+    "icon": "govardhan_mountain",
+    "theme": "mountain_shelter",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_22\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#0B1320\"/>\n          <stop offset=\"60%\" stop-color=\"#172A45\"/>\n          <stop offset=\"100%\" stop-color=\"#0B1320\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_22\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#74B9FF\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_22)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_22)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#74B9FF\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#74B9FF\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#74B9FF\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#0B1320\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#0B1320\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#0B1320\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F0CB7D\" stroke-width=\"1.8\" fill=\"#F0CB7D\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#74B9FF\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#0B1320\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 23,
+    "page": 3,
+    "category": "nikunja",
+    "categoryHindi": "रास व निकुंज लीला",
+    "categoryEnglish": "Raas & Nikunja Leelas",
+    "serialHindi": "23",
+    "titleHindi": "23. इंद्र मानभंग व गोविंद अभिषेक",
+    "titleEnglish": "23. Surrender of Indra and Surabhi's Govinda Coronation",
+    "hindi": "पराजित इंद्र ने ऐरावत हाथी के जल से और कामधेनु सुरभि गौ ने दिव्य दुग्ध से प्रभु का अभिषेक कर उन्हें 'गोविंद' (गौओं व इंद्रियों के रक्षक) नाम से सुशोभित किया।",
+    "english": "Repentant Indra bowed in humility, and mother Surabhi bathed Krishna with celestial milk, formally ordaining Him with the eternal name 'Govinda'—Protector of Cows and Senses.",
+    "icon": "surabhi_abhishek",
+    "theme": "celestial_nectar",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_23\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#151105\"/>\n          <stop offset=\"60%\" stop-color=\"#3D320C\"/>\n          <stop offset=\"100%\" stop-color=\"#151105\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_23\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#55E6C1\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_23)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_23)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F0CB7D\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F0CB7D\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F0CB7D\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#151105\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#151105\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#151105\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#55E6C1\" stroke-width=\"1.8\" fill=\"#55E6C1\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F0CB7D\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#151105\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 24,
+    "page": 3,
+    "category": "nikunja",
+    "categoryHindi": "रास व निकुंज लीला",
+    "categoryEnglish": "Raas & Nikunja Leelas",
+    "serialHindi": "24",
+    "titleHindi": "24. वरुण लोक से नंद बाबा का उद्धार",
+    "titleEnglish": "24. Rescuing Nanda Baba from Varuna's Subaquatic Realm",
+    "hindi": "एकादशी व्रत के उपरांत असुर वेला में स्नान करने से वरुण दूत द्वारा पकड़े गए नंद बाबा को कृष्ण ने वरुण देव के लोक में जाकर ससम्मान मुक्त कराया।",
+    "english": "When Nanda Baba was taken to the underwater kingdom of Varuna after accidentally bathing at an unholy hour, Krishna descended and brought His father back with royal honors.",
+    "icon": "varuna_ocean",
+    "theme": "underwater_glow",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_24\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#02121E\"/>\n          <stop offset=\"60%\" stop-color=\"#073252\"/>\n          <stop offset=\"100%\" stop-color=\"#02121E\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_24\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#00D2D3\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#54A0FF\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_24)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_24)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#00D2D3\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#00D2D3\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#00D2D3\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#02121E\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#02121E\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#02121E\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#54A0FF\" stroke-width=\"1.8\" fill=\"#54A0FF\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#00D2D3\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#02121E\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 25,
+    "page": 3,
+    "category": "nikunja",
+    "categoryHindi": "रास व निकुंज लीला",
+    "categoryEnglish": "Raas & Nikunja Leelas",
+    "serialHindi": "25",
+    "titleHindi": "25. अरिष्टासुर वध व राधाकुंड प्राकट्य",
+    "titleEnglish": "25. Slaying the Bull Demon Arishtasura & Radha Kunda",
+    "hindi": "विशाल सांड का रूप धरकर आए अरिष्टासुर के सींग मरोड़कर वध किया, जिसके उपरांत प्रभु ने चरण के प्रहार से श्यामकुंड और राधारानी ने कंगन से राधाकुंड प्रकट किया।",
+    "english": "Krishna vanquished the ferocious bull-demon Arishtasura, and to purify Himself created Shyama Kunda with His heel, whereupon Radharani excavated the supremely sacred Radha Kunda.",
+    "icon": "radha_kunda_lotus",
+    "theme": "holy_kundas",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_25\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#04151C\"/>\n          <stop offset=\"60%\" stop-color=\"#0B394A\"/>\n          <stop offset=\"100%\" stop-color=\"#04151C\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_25\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#00CEC9\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FF9FF3\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_25)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_25)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#00CEC9\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#00CEC9\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#00CEC9\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#04151C\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#04151C\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#04151C\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FF9FF3\" stroke-width=\"1.8\" fill=\"#FF9FF3\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#00CEC9\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#04151C\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 26,
+    "page": 3,
+    "category": "nikunja",
+    "categoryHindi": "रास व निकुंज लीला",
+    "categoryEnglish": "Raas & Nikunja Leelas",
+    "serialHindi": "26",
+    "titleHindi": "26. केशी वध / केशव नामकरण",
+    "titleEnglish": "26. Slaying of the Demonic Stallion Keshi",
+    "hindi": "अग्नि उगलते महाबली घोड़े के रूप में आए केशी असुर के मुख में अपनी भुजा डालकर उसका विस्तार किया और उसका संहार कर देवों द्वारा 'केशव' नाम से वंदित हुए।",
+    "english": "Thrusting His arm into the burning jaws of demon stallion Keshi, Krishna expanded His limb until the beast choked and perished, earning the celestial title 'Keshava'.",
+    "icon": "keshi_stallion",
+    "theme": "fiery_battle",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_26\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1E0A05\"/>\n          <stop offset=\"60%\" stop-color=\"#48160B\"/>\n          <stop offset=\"100%\" stop-color=\"#1E0A05\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_26\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#EE5253\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FFA502\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_26)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_26)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#EE5253\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#EE5253\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#EE5253\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1E0A05\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1E0A05\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1E0A05\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FFA502\" stroke-width=\"1.8\" fill=\"#FFA502\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#EE5253\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1E0A05\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 27,
+    "page": 3,
+    "category": "nikunja",
+    "categoryHindi": "रास व निकुंज लीला",
+    "categoryEnglish": "Raas & Nikunja Leelas",
+    "serialHindi": "27",
+    "titleHindi": "27. शरद पूर्णिमा महा-रास लीला",
+    "titleEnglish": "27. The Supreme Autumn Maha Raas Leela",
+    "hindi": "शरद पूर्णिमा की रात्रि में वंशीवट पर वेणु वादन कर गोपियों को आकर्षित किया और प्रत्येक गोपी के संग एक-एक कृष्ण रूप में प्रकट होकर प्रेम और भक्ति का दिव्य नृत्य किया।",
+    "english": "Under the radiant Sharad Purnima full moon at Vamsivat, Krishna played His Bansuri flute and multiplied into thousands of forms to dance in divine transcendental ecstasy with every Gopi.",
+    "icon": "maha_raas_moon",
+    "theme": "autumn_moonlight",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_27\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#060B1E\"/>\n          <stop offset=\"60%\" stop-color=\"#111D45\"/>\n          <stop offset=\"100%\" stop-color=\"#060B1E\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_27\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#A29BFE\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_27)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_27)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F0CB7D\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F0CB7D\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F0CB7D\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#060B1E\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#060B1E\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#060B1E\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#A29BFE\" stroke-width=\"1.8\" fill=\"#A29BFE\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F0CB7D\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#060B1E\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 28,
+    "page": 3,
+    "category": "nikunja",
+    "categoryHindi": "रास व निकुंज लीला",
+    "categoryEnglish": "Raas & Nikunja Leelas",
+    "serialHindi": "28",
+    "titleHindi": "28. अक्रूर आगमन व ब्रज विरह लीला",
+    "titleEnglish": "28. Akrura's Arrival & The Heartbreaking Vraja Separation",
+    "hindi": "कंस के निमंत्रण पर अक्रूर जी रथ लेकर वृंदावन आए और समस्त ब्रजवासियों, गोपियों तथा यशोदा मैया के अश्रुपूर्ण विरह के मध्य श्यामसुंदर मथुरा की ओर प्रस्थान कर गए।",
+    "english": "Akrura arrived with a royal chariot from Mathura, initiating the unbearable, sacred transcendental separation of the Gopis, Mother Yashoda, and the entire land of Vraja.",
+    "icon": "akrura_chariot",
+    "theme": "sunset_tears",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_28\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1D0A14\"/>\n          <stop offset=\"60%\" stop-color=\"#45162E\"/>\n          <stop offset=\"100%\" stop-color=\"#1D0A14\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_28\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#FF7675\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F39C12\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_28)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_28)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#FF7675\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#FF7675\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#FF7675\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1D0A14\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1D0A14\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1D0A14\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F39C12\" stroke-width=\"1.8\" fill=\"#F39C12\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#FF7675\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1D0A14\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 29,
+    "page": 4,
+    "category": "mathura",
+    "categoryHindi": "मथुरा लीला",
+    "categoryEnglish": "Mathura Leela",
+    "serialHindi": "29",
+    "titleHindi": "29. मथुरा प्रवेश व रजक उद्धार",
+    "titleEnglish": "29. Royal Entry into Mathura & Disciplining the Washerman",
+    "hindi": "मथुरा नगरी की वीथियों में प्रवेश करते हुए कंस के अहंकारी राजसी धोबी को दंड देकर अपने ग्वाल सखाओं को सुंदर राजसी परिधानों से सुसज्जित किया।",
+    "english": "Entering the grand avenues of Mathura, Krishna humbled Kansa's haughty royal washerman and lovingly dressed His simple cowherd companions in colorful royal robes.",
+    "icon": "mathura_gate",
+    "theme": "city_splendor",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_29\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#121018\"/>\n          <stop offset=\"60%\" stop-color=\"#2C263A\"/>\n          <stop offset=\"100%\" stop-color=\"#121018\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_29\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#DFE6E9\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_29)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_29)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F0CB7D\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F0CB7D\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F0CB7D\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#121018\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#121018\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#121018\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#DFE6E9\" stroke-width=\"1.8\" fill=\"#DFE6E9\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F0CB7D\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#121018\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 30,
+    "page": 4,
+    "category": "mathura",
+    "categoryHindi": "मथुरा लीला",
+    "categoryEnglish": "Mathura Leela",
+    "serialHindi": "30",
+    "titleHindi": "30. कुब्जा सुंदरी उद्धार / चंदन समर्पण",
+    "titleEnglish": "30. Deliverance of Hunched Maidservant Kubja",
+    "hindi": "सुगंधित चंदन भेंट करने वाली कुबड़ी दासी कुब्जा के पैरों पर अपना चरण रखकर ठोड़ी को अंगुली से ऊपर उठाया और उसे एक ही क्षण में रूपवती सुंदरी व अनन्य भक्त बना दिया।",
+    "english": "Pleased with the devotion of the hunched maid Kubja who offered Him sweet sandalwood paste, Krishna pressed her feet and lifted her chin, transforming her into a flawless beauty.",
+    "icon": "kubja_chandan",
+    "theme": "sandalwood_fragrance",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_30\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#181105\"/>\n          <stop offset=\"60%\" stop-color=\"#3D2B0C\"/>\n          <stop offset=\"100%\" stop-color=\"#181105\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_30\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#FDCB6E\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#E17055\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_30)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_30)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#FDCB6E\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#FDCB6E\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#FDCB6E\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#181105\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#181105\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#181105\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#E17055\" stroke-width=\"1.8\" fill=\"#E17055\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#FDCB6E\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#181105\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 31,
+    "page": 4,
+    "category": "mathura",
+    "categoryHindi": "मथुरा लीला",
+    "categoryEnglish": "Mathura Leela",
+    "serialHindi": "31",
+    "titleHindi": "31. कंस के महा-धनुष का भंजन",
+    "titleEnglish": "31. Snapping the Mighty Royal Bow of Kansa",
+    "hindi": "कंस की धनुषशाला में रखे वज्र के समान भारी महा-धनुष को अनायास ही उठाकर उस पर प्रत्यंचा चढ़ाई और एक ही झटके में तोड़कर उसकी गर्जना से तीनों लोकों को गुंजायमान किया।",
+    "english": "Entering Kansa's guarded armory, Krishna effortlessly lifted the colossal sacrificial bow, strung the chord, and snapped it in two with a roar that shook the citadel of Mathura.",
+    "icon": "shiva_bow_broken",
+    "theme": "lightning_power",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_31\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#080B1C\"/>\n          <stop offset=\"60%\" stop-color=\"#131C42\"/>\n          <stop offset=\"100%\" stop-color=\"#080B1C\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_31\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#74B9FF\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F1C40F\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_31)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_31)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#74B9FF\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#74B9FF\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#74B9FF\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#080B1C\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#080B1C\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#080B1C\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F1C40F\" stroke-width=\"1.8\" fill=\"#F1C40F\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#74B9FF\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#080B1C\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 32,
+    "page": 4,
+    "category": "mathura",
+    "categoryHindi": "मथुरा लीला",
+    "categoryEnglish": "Mathura Leela",
+    "serialHindi": "32",
+    "titleHindi": "32. कुवलयापीड़ हाथी का संहार",
+    "titleEnglish": "32. Liberation of the Mad War Elephant Kuvalayapida",
+    "hindi": "अखाड़े के सिंहद्वार पर मतवाले हाथी कुवलयापीड़ को पूंछ से पकड़कर घुमाया, उसके दोनों नुकीले दांत उखाड़ लिए और उसी से महावत सहित उसका उद्धार किया।",
+    "english": "At the arena entrance, Kansa's gigantic intoxicated elephant Kuvalayapida charged, but Krishna dragged him by his tail, ripped out his ivory tusks, and liberated the beast.",
+    "icon": "kuvalaya_elephant",
+    "theme": "arena_gates",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_32\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1A0C06\"/>\n          <stop offset=\"60%\" stop-color=\"#3D1D0E\"/>\n          <stop offset=\"100%\" stop-color=\"#1A0C06\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_32\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#E67E22\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#DFE4EA\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_32)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_32)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#E67E22\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#E67E22\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#E67E22\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1A0C06\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1A0C06\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1A0C06\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#DFE4EA\" stroke-width=\"1.8\" fill=\"#DFE4EA\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#E67E22\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1A0C06\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 33,
+    "page": 4,
+    "category": "mathura",
+    "categoryHindi": "मथुरा लीला",
+    "categoryEnglish": "Mathura Leela",
+    "serialHindi": "33",
+    "titleHindi": "33. चाणूर व मुष्टिक मल्लयुद्ध",
+    "titleEnglish": "33. Defeating Wrestling Champions Chanura & Mushtika",
+    "hindi": "कंस के रंगमहल में कृष्ण ने चाणूर को और बलराम जी ने मुष्टिक को मल्लयुद्ध में ललकार कर उनके घमंड को चूर-चूर करते हुए भूमि पर पटककर प्राण मुक्त किया।",
+    "english": "Inside the royal amphitheater, Krishna grappled with the invincible champion Chanura and Balarama battled Mushtika, vanquishing both ruthless titans with effortless grace.",
+    "icon": "wrestling_arena",
+    "theme": "gladiator_colosseum",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_33\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#170908\"/>\n          <stop offset=\"60%\" stop-color=\"#381512\"/>\n          <stop offset=\"100%\" stop-color=\"#170908\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_33\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#E74C3C\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F39C12\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_33)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_33)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#E74C3C\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#E74C3C\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#E74C3C\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#170908\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#170908\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#170908\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F39C12\" stroke-width=\"1.8\" fill=\"#F39C12\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#E74C3C\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#170908\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 34,
+    "page": 4,
+    "category": "mathura",
+    "categoryHindi": "मथुरा लीला",
+    "categoryEnglish": "Mathura Leela",
+    "serialHindi": "34",
+    "titleHindi": "34. कंस वध व उग्रसेन राज्याभिषेक",
+    "titleEnglish": "34. Slaying Tyrant Kansa & Crowning King Ugrasena",
+    "hindi": "अत्याचारी कंस को उसके ऊंचे सिंहासन से बालों से पकड़कर नीचे खींचा, उसका वध कर माता देवकी और पिता वसुदेव को बेड़ियों से मुक्त किया और उग्रसेन को मथुरा का राजा बनाया।",
+    "english": "Krishna leapt onto the royal dais, dragged the tyrant Kansa down by his locks, slayed him on the arena floor, unlocked His parents' chains, and restored King Ugrasena to the throne.",
+    "icon": "kansa_throne_fallen",
+    "theme": "triumph_justice",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_34\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#150918\"/>\n          <stop offset=\"60%\" stop-color=\"#381540\"/>\n          <stop offset=\"100%\" stop-color=\"#150918\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_34\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#9B59B6\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_34)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_34)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F0CB7D\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F0CB7D\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F0CB7D\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#150918\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#150918\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#150918\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#9B59B6\" stroke-width=\"1.8\" fill=\"#9B59B6\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F0CB7D\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#150918\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 35,
+    "page": 4,
+    "category": "mathura",
+    "categoryHindi": "मथुरा लीला",
+    "categoryEnglish": "Mathura Leela",
+    "serialHindi": "35",
+    "titleHindi": "35. सांदीपनि मुनि आश्रम में विद्यार्जन",
+    "titleEnglish": "35. Divine Education at Sage Sandipani's Gurukul",
+    "hindi": "अवंतिकापुरी में गुरु सांदीपनि के आश्रम में मात्र चौंसठ दिनों में चौंसठ कलाओं और समस्त वेदों में निपुणता प्राप्त कर यमपुरी से गुरु के मृत पुत्र को दक्षिणा में जीवित लौटाया।",
+    "english": "At Guru Sandipani's hermitage in Ujjain, Krishna and Balarama mastered all 64 arts and Vedic sciences in 64 days, reviving the Guru's deceased son from Yamaloka as Guru Dakshina.",
+    "icon": "sandipani_gurukul",
+    "theme": "vedic_wisdom",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_35\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#151006\"/>\n          <stop offset=\"60%\" stop-color=\"#3A2B0E\"/>\n          <stop offset=\"100%\" stop-color=\"#151006\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_35\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F39C12\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FFEAA7\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_35)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_35)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F39C12\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F39C12\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F39C12\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#151006\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#151006\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#151006\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FFEAA7\" stroke-width=\"1.8\" fill=\"#FFEAA7\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F39C12\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#151006\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 36,
+    "page": 5,
+    "category": "dwarka",
+    "categoryHindi": "द्वारका लीला",
+    "categoryEnglish": "Dwarka Leela",
+    "serialHindi": "36",
+    "titleHindi": "36. उद्धव संदेश व भ्रमरगीत लीला",
+    "titleEnglish": "36. Uddhava's Vrindavan Mission & The Bhramar Geet",
+    "hindi": "ज्ञानमार्गी सखा उद्धव को वृंदावन भेजकर गोपियों के निष्काम, अनन्य विरह प्रेम के दर्शन कराए, जिससे उद्धव जी का समस्त शुष्क ज्ञान प्रेम-भक्ति में विलीन हो गया।",
+    "english": "Krishna dispatched scholar Uddhava to Vrindavan, where the Gopis' unconditioned devotion and the famous Bhramar Geet dissolved his intellectual pride into ecstatic love.",
+    "icon": "bhramar_geet_bee",
+    "theme": "lotus_yearning",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_36\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#140816\"/>\n          <stop offset=\"60%\" stop-color=\"#351239\"/>\n          <stop offset=\"100%\" stop-color=\"#140816\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_36\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#FD79A8\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_36)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_36)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#FD79A8\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#FD79A8\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#FD79A8\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#140816\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#140816\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#140816\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F0CB7D\" stroke-width=\"1.8\" fill=\"#F0CB7D\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#FD79A8\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#140816\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 37,
+    "page": 5,
+    "category": "dwarka",
+    "categoryHindi": "द्वारका लीला",
+    "categoryEnglish": "Dwarka Leela",
+    "serialHindi": "37",
+    "titleHindi": "37. जरासंध पराजय व कालयवन उद्धार",
+    "titleEnglish": "37. Jarasandha's Retreat & The Burning of Kalyavana",
+    "hindi": "सत्रह बार जरासंध की सेना को पराजित किया और राजा मुचुकुंद की दिव्य दृष्टि से विदेशी आक्रांता कालयवन को भस्म करवाकर उसे मोक्ष प्रदान किया।",
+    "english": "Krishna repulsed Jarasandha's invasions 17 times and led the arrogant barbarian Kalyavana into King Muchukunda's cave, where the king's awakened gaze incinerated him to ashes.",
+    "icon": "muchukunda_cave",
+    "theme": "mystic_cavern",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_37\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#0A0B1A\"/>\n          <stop offset=\"60%\" stop-color=\"#171A3B\"/>\n          <stop offset=\"100%\" stop-color=\"#0A0B1A\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_37\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#6C5CE7\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_37)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_37)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#6C5CE7\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#6C5CE7\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#6C5CE7\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#0A0B1A\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#0A0B1A\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#0A0B1A\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F0CB7D\" stroke-width=\"1.8\" fill=\"#F0CB7D\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#6C5CE7\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#0A0B1A\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 38,
+    "page": 5,
+    "category": "dwarka",
+    "categoryHindi": "द्वारका लीला",
+    "categoryEnglish": "Dwarka Leela",
+    "serialHindi": "38",
+    "titleHindi": "38. स्वर्णमयी द्वारका नगरी का निर्माण",
+    "titleEnglish": "38. Construction of the Golden Sea Citadel of Dwarka",
+    "hindi": "समुद्र के गर्भ में देवशिल्पी विश्वकर्मा द्वारा अभेद्य, स्वर्ण, मणियों और रत्नों से सुसज्जित द्वारकापुरी का निर्माण कराया ताकि मथुरा की प्रजा सदा के लिए सुरक्षित रह सके।",
+    "english": "Krishna directed divine architect Vishwakarma to construct the impregnable golden island kingdom of Dwarka in the western sea to ensure everlasting peace for His subjects.",
+    "icon": "dwarka_spires",
+    "theme": "golden_ocean",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_38\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#031020\"/>\n          <stop offset=\"60%\" stop-color=\"#082B50\"/>\n          <stop offset=\"100%\" stop-color=\"#031020\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_38\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#00CEC9\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_38)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_38)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F0CB7D\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F0CB7D\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F0CB7D\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#031020\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#031020\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#031020\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#00CEC9\" stroke-width=\"1.8\" fill=\"#00CEC9\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F0CB7D\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#031020\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 39,
+    "page": 5,
+    "category": "dwarka",
+    "categoryHindi": "द्वारका लीला",
+    "categoryEnglish": "Dwarka Leela",
+    "serialHindi": "39",
+    "titleHindi": "39. रुक्मिणी हरण व पाणिग्रहण लीला",
+    "titleEnglish": "39. The Abduction & Divine Marriage with Devi Rukmini",
+    "hindi": "विदर्भ राजकुमारी रुक्मिणी के गुप्त प्रेम पत्र की पुकार सुनकर शिशुपाल और जरासंध की सेना को पराजित कर उनका हरण किया और द्वारका में पटरानी के रूप में वरण किया।",
+    "english": "Answering Princess Rukmini's confidential letter of surrender, Krishna swept into Kundinapura, outmaneuvered Sisupala's armies, and wedded Rukmini as His principal queen.",
+    "icon": "rukmini_wedding",
+    "theme": "royal_romance",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_39\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1A0B14\"/>\n          <stop offset=\"60%\" stop-color=\"#421832\"/>\n          <stop offset=\"100%\" stop-color=\"#1A0B14\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_39\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#FF7675\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_39)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_39)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#FF7675\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#FF7675\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#FF7675\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1A0B14\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1A0B14\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1A0B14\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F0CB7D\" stroke-width=\"1.8\" fill=\"#F0CB7D\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#FF7675\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1A0B14\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 40,
+    "page": 5,
+    "category": "dwarka",
+    "categoryHindi": "द्वारका लीला",
+    "categoryEnglish": "Dwarka Leela",
+    "serialHindi": "40",
+    "titleHindi": "40. स्यमंतक मणि व जाम्बवती-सत्यभामा विवाह",
+    "titleEnglish": "40. The Syamantaka Jewel, Jambavati & Satyabhama",
+    "hindi": "मिथ्या कलंक दूर करने हेतु गुफा में रीछराज जाम्बवंत से अठाईस दिन मल्ल युद्ध किया, मणि प्राप्त की और जाम्बवती तथा सत्राजित की कन्या सत्यभामा से पाणिग्रहण किया।",
+    "english": "To clear false accusations, Krishna fought bear-king Jambavan for 28 days to recover the dazzling Syamantaka gem, marrying Jambavan's daughter Jambavati and Satrajit's daughter Satyabhama.",
+    "icon": "syamantaka_gem",
+    "theme": "solar_jewel",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_40\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#181003\"/>\n          <stop offset=\"60%\" stop-color=\"#452E07\"/>\n          <stop offset=\"100%\" stop-color=\"#181003\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_40\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F1C40F\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FF9F43\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_40)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_40)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F1C40F\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F1C40F\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F1C40F\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#181003\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#181003\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#181003\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FF9F43\" stroke-width=\"1.8\" fill=\"#FF9F43\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F1C40F\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#181003\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 41,
+    "page": 5,
+    "category": "dwarka",
+    "categoryHindi": "द्वारका लीला",
+    "categoryEnglish": "Dwarka Leela",
+    "serialHindi": "41",
+    "titleHindi": "41. स्वर्ग से पारिजात हरण लीला",
+    "titleEnglish": "41. Bringing the Celestial Parijata Tree from Heaven",
+    "hindi": "देवी सत्यभामा की इच्छा पूर्ण करने हेतु देवराज इंद्र की अमरावती से कल्पवृक्ष पारिजात को गरुड़ पर रखकर धरती पर लाए और सत्यभामा की वाटिका में रोपित किया।",
+    "english": "To fulfill Queen Satyabhama's heartfelt wish, Krishna mounted Garuda, defeated Indra's celestial forces, and transplanted the immortal Parijata flower tree into Dwarka.",
+    "icon": "parijata_tree",
+    "theme": "heavenly_blossoms",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_41\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#0F1508\"/>\n          <stop offset=\"60%\" stop-color=\"#273814\"/>\n          <stop offset=\"100%\" stop-color=\"#0F1508\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_41\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#55E6C1\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FD79A8\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_41)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_41)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#55E6C1\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#55E6C1\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#55E6C1\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#0F1508\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#0F1508\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#0F1508\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FD79A8\" stroke-width=\"1.8\" fill=\"#FD79A8\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#55E6C1\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#0F1508\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 42,
+    "page": 5,
+    "category": "dwarka",
+    "categoryHindi": "द्वारका लीला",
+    "categoryEnglish": "Dwarka Leela",
+    "serialHindi": "42",
+    "titleHindi": "42. नरकासुर वध व 16,100 कन्याओं की मुक्ति",
+    "titleEnglish": "42. Slaying Narakasura & Liberating 16,100 Princesses",
+    "hindi": "सत्यभामा संग प्राग्ज्योतिषपुर जाकर अत्याचारी नरकासुर का संहार किया और उसकी कारागार में कैद १६,१०० राजकुमारियों को मुक्त कर समाज में उन्हें पटरानी का सर्वोच्च सम्मान दिया।",
+    "english": "Accompanied by Satyabhama, Krishna liberated the demon Narakasura and bestowed divine dignity and royal shelter upon 16,100 captive princesses as His beloved queens.",
+    "icon": "narakasura_crowns",
+    "theme": "liberation_light",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_42\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#120B1C\"/>\n          <stop offset=\"60%\" stop-color=\"#2D1B44\"/>\n          <stop offset=\"100%\" stop-color=\"#120B1C\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_42\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#A29BFE\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_42)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_42)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#A29BFE\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#A29BFE\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#A29BFE\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#120B1C\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#120B1C\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#120B1C\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F0CB7D\" stroke-width=\"1.8\" fill=\"#F0CB7D\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#A29BFE\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#120B1C\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 43,
+    "page": 5,
+    "category": "dwarka",
+    "categoryHindi": "द्वारका लीला",
+    "categoryEnglish": "Dwarka Leela",
+    "serialHindi": "43",
+    "titleHindi": "43. दीनबंधु सुदामा मिलन लीला",
+    "titleEnglish": "43. The Emotional Reunion with Childhood Friend Sudama",
+    "hindi": "निर्धन ब्राह्मण सखा सुदामा के फटे वस्त्र देखकर प्रभु सिंहासन से नंगे पैर दौड़े, अश्रुओं से चरण धोए और उनके दो मुट्ठी सूखे चावल खाकर त्रिलोकी का ऐश्वर्य बिना मांगे समर्पित किया।",
+    "english": "Seeing impoverished friend Sudama at His palace gates, Krishna rushed barefoot, washed his weary feet with tears, and after tasting his dry rice flakes, bestowed limitless celestial riches upon him.",
+    "icon": "sudama_embrace",
+    "theme": "divine_friendship",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_43\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#160F06\"/>\n          <stop offset=\"60%\" stop-color=\"#3A270D\"/>\n          <stop offset=\"100%\" stop-color=\"#160F06\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_43\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F9CA24\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_43)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_43)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F0CB7D\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F0CB7D\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F0CB7D\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#160F06\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#160F06\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#160F06\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F9CA24\" stroke-width=\"1.8\" fill=\"#F9CA24\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F0CB7D\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#160F06\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 44,
+    "page": 6,
+    "category": "gita",
+    "categoryHindi": "महाभारत व गीता लीला",
+    "categoryEnglish": "Kurukshetra & Gita Leela",
+    "serialHindi": "44",
+    "titleHindi": "44. द्रौपदी चीर हरण में अनंत वस्त्र प्रदान",
+    "titleEnglish": "44. Miraculous Protection of Draupadi's Dignity",
+    "hindi": "कुरु राजसभा में जब द्रौपदी ने दोनों हाथ उठाकर 'हे द्वारकानाथ!' पुकारा, तो प्रभु ने अदृश्य रूप से अनंत साड़ियों का वस्त्र-भंडार बढ़ाकर भरी सभा में शील की रक्षा की।",
+    "english": "When Draupadi raised both hands in total surrender crying 'O Lord of Dwarka!', Krishna manifested an unending stream of vibrant sarees, miraculously preserving her honor in the Kuru assembly.",
+    "icon": "draupadi_saree",
+    "theme": "infinite_cloth",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_44\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1C0812\"/>\n          <stop offset=\"60%\" stop-color=\"#45132B\"/>\n          <stop offset=\"100%\" stop-color=\"#1C0812\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_44\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#FF7675\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#00CEC9\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_44)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_44)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#FF7675\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#FF7675\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#FF7675\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1C0812\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1C0812\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1C0812\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#00CEC9\" stroke-width=\"1.8\" fill=\"#00CEC9\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#FF7675\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1C0812\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 45,
+    "page": 6,
+    "category": "gita",
+    "categoryHindi": "महाभारत व गीता लीला",
+    "categoryEnglish": "Kurukshetra & Gita Leela",
+    "serialHindi": "45",
+    "titleHindi": "45. महाभारत में शांति दूत लीला",
+    "titleEnglish": "45. The Divine Messenger of Peace in Hastinapura",
+    "hindi": "महाभारत का महाविनाशकारी युद्ध टालने हेतु स्वयं पांडवों के दूत बनकर हस्तिनापुर गए और दुर्योधन द्वारा बंदी बनाने के कुत्सित प्रयास पर अपना विराट तेज प्रदर्शित किया।",
+    "english": "Seeking to prevent catastrophic warfare, Krishna arrived as an ambassador of peace, and when proud Duryodhana attempted to capture Him, the Lord flashed His awe-inspiring cosmic brilliance.",
+    "icon": "shanti_doot",
+    "theme": "royal_peace",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_45\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#100F1A\"/>\n          <stop offset=\"60%\" stop-color=\"#26243E\"/>\n          <stop offset=\"100%\" stop-color=\"#100F1A\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_45\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#54A0FF\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_45)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_45)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F0CB7D\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F0CB7D\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F0CB7D\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#100F1A\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#100F1A\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#100F1A\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#54A0FF\" stroke-width=\"1.8\" fill=\"#54A0FF\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F0CB7D\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#100F1A\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 46,
+    "page": 6,
+    "category": "gita",
+    "categoryHindi": "महाभारत व गीता लीला",
+    "categoryEnglish": "Kurukshetra & Gita Leela",
+    "serialHindi": "46",
+    "titleHindi": "46. पार्थसारथी - अर्जुन के दिव्य सारथी",
+    "titleEnglish": "46. Partha Sarathi - The Supreme Charioteer",
+    "hindi": "युद्ध में शस्त्र न उठाने का प्रण लेकर अर्जुन के नंदीघोष रथ के चार श्वेत घोड़ों की लगाम थामी और युद्धभूमि में सत्य और धर्म का सर्वोच्च सारथी बनकर मार्गदर्शन किया।",
+    "english": "Vowing never to pick up weapons in battle, the Supreme Lord took the reins of Arjuna's chariot, serving as 'Partha Sarathi'—the eternal divine guide for all humanity.",
+    "icon": "partha_sarathi_chariot",
+    "theme": "battlefield_dawn",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_46\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#1C0E06\"/>\n          <stop offset=\"60%\" stop-color=\"#42200D\"/>\n          <stop offset=\"100%\" stop-color=\"#1C0E06\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_46\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#E67E22\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_46)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_46)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#E67E22\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#E67E22\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#E67E22\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#1C0E06\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#1C0E06\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#1C0E06\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F0CB7D\" stroke-width=\"1.8\" fill=\"#F0CB7D\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#E67E22\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#1C0E06\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 47,
+    "page": 6,
+    "category": "gita",
+    "categoryHindi": "महाभारत व गीता लीला",
+    "categoryEnglish": "Kurukshetra & Gita Leela",
+    "serialHindi": "47",
+    "titleHindi": "47. श्रीमद्भगवद्गीता का अमर उपदेश",
+    "titleEnglish": "47. The Immortal Song Celestial - Shrimad Bhagavad Gita",
+    "hindi": "कुरुक्षेत्र के रणक्षेत्र में दोनों सेनाओं के मध्य मोहग्रस्त अर्जुन को कर्मयोग, सांख्ययोग और अनन्य शरणागति का वह अमृतमय ज्ञान दिया जो संपूर्ण संसार का जीवन दर्शन है।",
+    "english": "Stationed between opposing armies, Krishna revealed the 700 verses of the Bhagavad Gita, awakening sorrowful Arjuna to the timeless yoga of duty, detached action, and surrender.",
+    "icon": "bhagavad_gita_conch",
+    "theme": "celestial_song",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_47\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#090F20\"/>\n          <stop offset=\"60%\" stop-color=\"#14254D\"/>\n          <stop offset=\"100%\" stop-color=\"#090F20\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_47\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#74B9FF\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_47)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_47)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F0CB7D\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F0CB7D\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F0CB7D\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#090F20\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#090F20\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#090F20\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#74B9FF\" stroke-width=\"1.8\" fill=\"#74B9FF\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F0CB7D\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#090F20\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 48,
+    "page": 6,
+    "category": "gita",
+    "categoryHindi": "महाभारत व गीता लीला",
+    "categoryEnglish": "Kurukshetra & Gita Leela",
+    "serialHindi": "48",
+    "titleHindi": "48. विराट रूप / विश्वरूप दर्शन",
+    "titleEnglish": "48. The Cosmic Universal Form - Vishwaroopa Darshan",
+    "hindi": "अर्जुन को दिव्य चक्षु प्रदान कर अपने सहस्रों मुखों, सूर्य-चंद्र सदृश नेत्रों, काल रूपी विकराल दांतों तथा संपूर्ण चराचर ब्रह्मांड को अपने भीतर समाए विराट रूप के साक्षात दर्शन कराए।",
+    "english": "Bestowing celestial sight upon Arjuna, Krishna revealed His blinding, omnipotent universal form embracing all universes, gods, sages, cosmic time, and fiery cosmic dissolution.",
+    "icon": "vishwaroop_halo",
+    "theme": "infinite_cosmos",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_48\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#050314\"/>\n          <stop offset=\"60%\" stop-color=\"#120B30\"/>\n          <stop offset=\"100%\" stop-color=\"#050314\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_48\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#A29BFE\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F1C40F\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_48)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_48)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#A29BFE\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#A29BFE\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#A29BFE\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#050314\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#050314\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#050314\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F1C40F\" stroke-width=\"1.8\" fill=\"#F1C40F\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#A29BFE\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#050314\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 49,
+    "page": 6,
+    "category": "gita",
+    "categoryHindi": "महाभारत व गीता लीला",
+    "categoryEnglish": "Kurukshetra & Gita Leela",
+    "serialHindi": "49",
+    "titleHindi": "49. भीष्म पितामह का शरशय्या पर मोक्ष",
+    "titleEnglish": "49. Deliverance of Grandfather Bhishma on the Bed of Arrows",
+    "hindi": "शरशय्या पर लेटे महाबली भीष्म पितामह के सम्मुख चतुर्भुज रूप में उपस्थित होकर उनके नेत्रों को तृप्त किया और पितामह की अंतिम स्तुति सुनकर उन्हें अपने परमधाम में विश्राम दिया।",
+    "english": "Krishna stood radiantly before Grandfather Bhishma lying upon the bed of arrows, serenely accepting his sublime prayers before welcoming his soul into the eternal spiritual abode.",
+    "icon": "bhishma_bed_arrows",
+    "theme": "sunset_moksha",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_49\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#180A10\"/>\n          <stop offset=\"60%\" stop-color=\"#3E1728\"/>\n          <stop offset=\"100%\" stop-color=\"#180A10\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_49\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#FF7675\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#F0CB7D\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_49)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_49)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#FF7675\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#FF7675\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#FF7675\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#180A10\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#180A10\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#180A10\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#F0CB7D\" stroke-width=\"1.8\" fill=\"#F0CB7D\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#FF7675\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#180A10\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  },
+  {
+    "id": 50,
+    "page": 6,
+    "category": "gita",
+    "categoryHindi": "महाभारत व गीता लीला",
+    "categoryEnglish": "Kurukshetra & Gita Leela",
+    "serialHindi": "50",
+    "titleHindi": "50. गर्भस्थ शिशु परीक्षित की सुदर्शन चक्र से रक्षा",
+    "titleEnglish": "50. Protecting Baby Parikshit in the Womb with Sudarshana",
+    "hindi": "अश्वत्थामा द्वारा पांडव वंश को समूल नष्ट करने हेतु चलाए गए अचूक ब्रह्मास्त्र से माता उत्तरा के गर्भ में प्रविष्ट होकर अपने अंगूठे के बराबर रूप में सुदर्शन चक्र से परीक्षित की रक्षा की।",
+    "english": "When Ashwatthama released the lethal Brahmastra against the unborn heir of the Pandavas, Krishna entered the womb of Mother Uttara and shielded the infant Parikshit with His blazing Sudarshana Chakra.",
+    "icon": "sudarshana_shield",
+    "theme": "chakra_radiance",
+    "illustrationSvg": "<svg class=\"leela-svg-art\" viewBox=\"0 0 320 140\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"grad_l_50\" x1=\"0\" y1=\"0\" x2=\"320\" y2=\"140\" gradientUnits=\"userSpaceOnUse\">\n          <stop offset=\"0%\" stop-color=\"#190C03\"/>\n          <stop offset=\"60%\" stop-color=\"#451F07\"/>\n          <stop offset=\"100%\" stop-color=\"#190C03\"/>\n        </linearGradient>\n        <radialGradient id=\"halo_50\" cx=\"50%\" cy=\"45%\" r=\"45%\">\n          <stop offset=\"0%\" stop-color=\"#F39C12\" stop-opacity=\"0.35\"/>\n          <stop offset=\"65%\" stop-color=\"#FF4757\" stop-opacity=\"0.1\"/>\n          <stop offset=\"100%\" stop-color=\"transparent\"/>\n        </radialGradient>\n      </defs>\n      <!-- Background Sky / Atmosphere -->\n      <rect width=\"320\" height=\"140\" rx=\"8\" fill=\"url(#grad_l_50)\"/>\n      <circle cx=\"160\" cy=\"65\" r=\"75\" fill=\"url(#halo_50)\"/>\n      <!-- Ambient Stars -->\n      <circle cx=\"45\" cy=\"25\" r=\"1.2\" fill=\"#FFFFFF\" opacity=\"0.7\"/>\n      <circle cx=\"85\" cy=\"40\" r=\"0.9\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"270\" cy=\"30\" r=\"1.3\" fill=\"#FFFFFF\" opacity=\"0.65\"/>\n      <circle cx=\"230\" cy=\"45\" r=\"0.8\" fill=\"#FFFFFF\" opacity=\"0.5\"/>\n      <circle cx=\"35\" cy=\"95\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/>\n      <circle cx=\"285\" cy=\"85\" r=\"1.1\" fill=\"#FFFFFF\" opacity=\"0.6\"/>\n\n      <!-- Sacred Central Motif -->\n      <g transform=\"translate(160, 65)\">\n        <!-- Outer Halo Ring -->\n        <circle cx=\"0\" cy=\"0\" r=\"38\" stroke=\"#F39C12\" stroke-width=\"1.2\" stroke-dasharray=\"2 3\" opacity=\"0.6\"/>\n        <circle cx=\"0\" cy=\"0\" r=\"28\" stroke=\"#F39C12\" stroke-width=\"1\" opacity=\"0.4\"/>\n        \n        <!-- Center Symbol: Krishna Peacock Feather & Flute Emblem -->\n        <!-- Flute diagonal -->\n        <line x1=\"-24\" y1=\"12\" x2=\"24\" y2=\"-12\" stroke=\"#F39C12\" stroke-width=\"2.6\" stroke-linecap=\"round\"/>\n        <circle x=\"-8\" y=\"4\" r=\"1\" fill=\"#190C03\"/>\n        <circle x=\"0\" y=\"0\" r=\"1\" fill=\"#190C03\"/>\n        <circle x=\"8\" y=\"-4\" r=\"1\" fill=\"#190C03\"/>\n        \n        <!-- Sacred Peacock Feather Crown -->\n        <path d=\"M-10 6 C -18 -6, -8 -24, 6 -20 C 14 -18, 12 -4, 2 0\" stroke=\"#FF4757\" stroke-width=\"1.8\" fill=\"#FF4757\" fill-opacity=\"0.25\"/>\n        <ellipse cx=\"-2\" cy=\"-12\" rx=\"4.5\" ry=\"6\" fill=\"#F39C12\" fill-opacity=\"0.8\"/>\n        <circle cx=\"-2\" cy=\"-12\" r=\"2.2\" fill=\"#190C03\"/>\n        \n        <!-- Auspicious Star Sparkle -->\n        <circle cx=\"20\" cy=\"-10\" r=\"1.4\" fill=\"#FFFFFF\"/>\n        <circle cx=\"-18\" cy=\"9\" r=\"1.2\" fill=\"#FFFFFF\"/>\n      </g>\n    </svg>"
+  }
+];
+
+  const CHAPTER_PAGES = {
+    1: { hi: "बाल व गोकुल लीला", en: "Gokul & Infancy Pastimes", range: "लीला 1 - 10", count: 10 },
+    2: { hi: "वृंदावन व सखा लीला", en: "Vrindavan Forest & Cowherd Pastimes", range: "लीला 11 - 22", count: 12 },
+    3: { hi: "रास व निकुंज लीला", en: "Transcendental Raas & Nikunja Pastimes", range: "लीला 23 - 28", count: 6 },
+    4: { hi: "मथुरा व कंस लीला", en: "Mathura Citadel & Liberation of Kansa", range: "लीला 29 - 35", count: 7 },
+    5: { hi: "द्वारकाधीश लीला", en: "Golden Dwarka & Royal Pastimes", range: "लीला 36 - 43", count: 8 },
+    6: { hi: "महाभारत व गीता लीला", en: "Kurukshetra, Bhagavad Gita & Moksha", range: "लीला 44 - 50", count: 7 }
+  };
+
+  const TOTAL_PAGES = 6;
+  let currentPage = 1; // 1 to 6 or 'all'
+
+  const leelasPagesNav = document.getElementById('leelasPagesNav');
+  const leelasCardsGrid = document.getElementById('leelasCardsGrid');
+  const prevPageBtn = document.getElementById('prevPageBtn');
+  const nextPageBtn = document.getElementById('nextPageBtn');
+  const prevPageBtnBottom = document.getElementById('prevPageBtnBottom');
+  const nextPageBtnBottom = document.getElementById('nextPageBtnBottom');
+  const currentPageText = document.getElementById('currentPageText');
+  const currentChapterTitle = document.getElementById('currentChapterTitle');
+  const currentPageTextBottom = document.getElementById('currentPageTextBottom');
+  const currentChapterTitleBottom = document.getElementById('currentChapterTitleBottom');
+
+  function formatQuotedText(text) {
+    if (!text) return '""';
+    const clean = String(text).trim().replace(/^["“”«»]/, '').replace(/["“”«»]$/, '').trim();
+    return `"${clean}"`;
+  }
+
+  function createIllustratedCard(item) {
+    const card = document.createElement('article');
+    card.className = 'leela-card';
+    card.setAttribute('data-id', item.id);
+    card.setAttribute('data-page', item.page);
+
+    const quotedHindi = formatQuotedText(item.hindi);
+    const quotedEnglish = formatQuotedText(item.english);
+
+    card.innerHTML = `
+      <div class="leela-illustration-panel">
+        ${item.illustrationSvg}
+      </div>
+      <div class="leela-card-top">
+        <span class="leela-serial-badge">लीला ${item.id} • LEELA ${item.id}</span>
+        <span class="leela-category-badge">${item.categoryHindi}</span>
+      </div>
+      <div class="leela-titles-wrap">
+        <h3 class="leela-title-hindi">${item.titleHindi}</h3>
+        <h4 class="leela-title-english">${item.titleEnglish}</h4>
+      </div>
+      <div class="leela-verse-box glass-card">
+        <p class="leela-verse-hindi">${quotedHindi}</p>
+        <p class="leela-verse-english">${quotedEnglish}</p>
+      </div>
+    `;
+    return card;
+  }
+
+  function renderPage(pageSelection, shouldScroll = true) {
+    currentPage = pageSelection;
+
+    // Update Top Page Tab Buttons
+    if (leelasPagesNav) {
+      const pageTabs = leelasPagesNav.querySelectorAll('.leela-page-tab');
+      pageTabs.forEach(tab => {
+        const tabVal = tab.getAttribute('data-page');
+        if (tabVal === String(currentPage)) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
+    }
+
+    // Update Pagination Indicators & Buttons
+    if (currentPage === 'all') {
+      const allText = 'सम्पूर्ण ग्रंथ • ALL 50 LEELAS';
+      const allSub = 'समस्त 50 पावन लीलाओं के दर्शन';
+      if (currentPageText) currentPageText.textContent = allText;
+      if (currentChapterTitle) currentChapterTitle.textContent = allSub;
+      if (currentPageTextBottom) currentPageTextBottom.textContent = allText;
+      if (currentChapterTitleBottom) currentChapterTitleBottom.textContent = allSub;
+
+      if (prevPageBtn) prevPageBtn.disabled = true;
+      if (nextPageBtn) nextPageBtn.disabled = true;
+      if (prevPageBtnBottom) prevPageBtnBottom.disabled = true;
+      if (nextPageBtnBottom) nextPageBtnBottom.disabled = true;
+    } else {
+      const pageNum = parseInt(currentPage, 10);
+      const chapterInfo = CHAPTER_PAGES[pageNum] || CHAPTER_PAGES[1];
+      const pageIndicator = `पृष्ठ ${pageNum} / ${TOTAL_PAGES} • PAGE ${pageNum} OF ${TOTAL_PAGES}`;
+      const chapterIndicator = `${chapterInfo.hi} (${chapterInfo.en}) • ${chapterInfo.range}`;
+
+      if (currentPageText) currentPageText.textContent = pageIndicator;
+      if (currentChapterTitle) currentChapterTitle.textContent = chapterIndicator;
+      if (currentPageTextBottom) currentPageTextBottom.textContent = pageIndicator;
+      if (currentChapterTitleBottom) currentChapterTitleBottom.textContent = chapterIndicator;
+
+      const isFirst = (pageNum <= 1);
+      const isLast = (pageNum >= TOTAL_PAGES);
+
+      if (prevPageBtn) prevPageBtn.disabled = isFirst;
+      if (nextPageBtn) nextPageBtn.disabled = isLast;
+      if (prevPageBtnBottom) prevPageBtnBottom.disabled = isFirst;
+      if (nextPageBtnBottom) nextPageBtnBottom.disabled = isLast;
+    }
+
+    // Smooth Page Transition
+    if (leelasCardsGrid) {
+      leelasCardsGrid.classList.add('page-transitioning');
+
+      setTimeout(() => {
+        leelasCardsGrid.innerHTML = '';
+        const itemsToRender = (currentPage === 'all')
+          ? KRISHNA_LEELAS
+          : KRISHNA_LEELAS.filter(item => item.page === parseInt(currentPage, 10));
+
+        itemsToRender.forEach(item => {
+          leelasCardsGrid.appendChild(createIllustratedCard(item));
+        });
+
+        leelasCardsGrid.classList.remove('page-transitioning');
+
+        if (shouldScroll) {
+          const toolbar = document.querySelector('.leelas-page-toolbar');
+          if (toolbar) {
+            const topPos = toolbar.getBoundingClientRect().top + window.pageYOffset - 80;
+            window.scrollTo({ top: topPos, behavior: 'smooth' });
+          }
+        }
+      }, 150);
+    }
+  }
+
+  // Hook Tab Clicks
+  if (leelasPagesNav) {
+    const pageTabs = leelasPagesNav.querySelectorAll('.leela-page-tab');
+    pageTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetPage = tab.getAttribute('data-page');
+        renderPage(targetPage, true);
+      });
+    });
+  }
+
+  // Pagination button listeners
+  function goPrev() {
+    if (currentPage !== 'all') {
+      const p = parseInt(currentPage, 10);
+      if (p > 1) renderPage(p - 1, true);
+    }
+  }
+
+  function goNext() {
+    if (currentPage !== 'all') {
+      const p = parseInt(currentPage, 10);
+      if (p < TOTAL_PAGES) renderPage(p + 1, true);
+    }
+  }
+
+  if (prevPageBtn) prevPageBtn.addEventListener('click', goPrev);
+  if (nextPageBtn) nextPageBtn.addEventListener('click', goNext);
+  if (prevPageBtnBottom) prevPageBtnBottom.addEventListener('click', goPrev);
+  if (nextPageBtnBottom) nextPageBtnBottom.addEventListener('click', goNext);
+
+  // Keyboard navigation
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      goPrev();
+    } else if (e.key === 'ArrowRight') {
+      goNext();
+    }
+  });
+
+  // Back to Top button
+  const backToTopBtn = document.getElementById('backToTopBtn');
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Check URL query parameters (e.g. leelas.html?page=2)
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialPage = urlParams.get('page') || '1';
+  renderPage(initialPage, false);
+
+  showToast('🌸 श्री कृष्ण लीला अमृत • दिव्य सचित्र ग्रंथ में आपका स्वागत है');
+});
+

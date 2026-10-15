@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>श्री कृष्ण लीला अमृत • The Transcendental Leelas of Lord Krishna</title>
+  <meta name="description" content="भगवान श्री कृष्ण की 50 दिव्य व पावन लीलाएँ - सचित्र दर्शन एवं हिन्दी-अंग्रेजी द्विभाषी अमृत ग्रंथ">
+  
+  <!-- Google Fonts: Cinzel, Montserrat, Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="leelas-page-body">
+
+  <!-- Animating Peacock Feather & Twinkling Background Video (Same as Home Page) -->
+  <div class="video-bg-container" id="videoBgContainer" aria-hidden="true">
+    <video 
+      id="bgVideo" 
+      class="bg-video" 
+      autoplay 
+      loop 
+      muted 
+      playsinline 
+      preload="auto"
+    >
+      <source src="https://res.cloudinary.com/acggupzy/video/upload/v1791781565/Animating_feather_and_twinkling___20261012102408.mp4" type="video/mp4">
+    </video>
+    <!-- Atmospheric Glass Depth Vignette Overlay -->
+    <div class="video-vignette-overlay" id="videoOverlay"></div>
+    <!-- Cursor Interactive Spotlight Illumination Layers -->
+    <div class="video-spotlight-beam" id="videoSpotlightBeam"></div>
+  </div>
+
+  <!-- Sticky Top Glass Navigation Header -->
+  <header class="leelas-navbar glass-card">
+    <div class="leelas-navbar-inner">
+      <a href="index.html" class="leelas-brand-link" title="मुख्य पृष्ठ पर लौटें / Return to Home">
+        <span class="om-symbol">ॐ</span>
+        <div class="brand-text-col">
+          <span class="brand-title">श्री कृष्ण लीला अमृत</span>
+          <span class="brand-subtitle">SACRED TRANSCENDENTAL CHRONICLES</span>
+        </div>
+      </a>
+
+      <div class="leelas-nav-actions">
+        <!-- Glass UI Background Video Toggle Switch -->
+        <div class="glass-toggle-wrapper">
+          <button class="glass-toggle-btn active" id="bgVideoToggle" role="switch" aria-checked="true" aria-label="Toggle background animation" title="Toggle background video: Animated Feather & Stars vs Pure Black">
+            <span class="toggle-icon-wrap">
+              <svg class="toggle-icon icon-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </span>
+            <span class="toggle-label" id="toggleLabel">AMBIENT VIDEO</span>
+            <span class="toggle-switch-track">
+              <span class="toggle-switch-thumb"></span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Water Glass Page Navigation Capsule -->
+        <nav class="nav-page-capsule" aria-label="Page Navigation">
+          <a href="index.html" class="nav-page-pill">HOME</a>
+          <a href="about.html" class="nav-page-pill">ABOUT</a>
+          <a href="leelas.html" class="nav-page-pill active">LEELAS</a>
+        </nav>
+
+<button class="sudarshan-chakra-btn glass-btn" id="chakraAudioBtn" aria-label="Toggle Divine Flute Harmony with Sudarshana Chakra" title="सुदर्शन चक्र • Click to Play/Stop Flute Melody">
+          <div class="chakra-wrapper">
+            <svg class="sudarshan-chakra-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="chakraGoldFire" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFDF0"/>
+      <stop offset="20%" stop-color="#FBD561"/>
+      <stop offset="55%" stop-color="#E67E22"/>
+      <stop offset="85%" stop-color="#D35400"/>
+      <stop offset="100%" stop-color="#C0392B"/>
+    </linearGradient>
+
+    <radialGradient id="chakraCoreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="25%" stop-color="#FFF3C4"/>
+      <stop offset="60%" stop-color="#F39C12"/>
+      <stop offset="88%" stop-color="#D35400"/>
+      <stop offset="100%" stop-color="#96281B"/>
+    </radialGradient>
+
+    <radialGradient id="chakraAuraGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="65%" stop-color="#F1C40F" stop-opacity="0.35"/>
+      <stop offset="85%" stop-color="#E67E22" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+
+    <filter id="chakraBloom" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="3.2" flood-color="#F39C12" flood-opacity="0.9"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="6.5" flood-color="#E67E22" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Radiant Aura Halo -->
+  <circle cx="50" cy="50" r="48" fill="url(#chakraAuraGlow)"/>
+
+  <!-- Serrated Discus Body with Filter -->
+  <g filter="url(#chakraBloom)">
+    <!-- 24 Serrated Curved Teeth Blades -->
+    <g transform="rotate(0 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(15 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(30 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(45 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(60 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(75 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(90 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(105 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(120 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(135 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(150 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(165 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(180 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(195 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(210 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(225 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(240 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(255 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(270 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(285 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(300 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(315 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(330 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g><g transform="rotate(345 50 50)"><path d="M 48 11.5 C 49 7, 52 3.5, 56 2.5 C 54.5 6.5, 54 9, 52 11.5 Z" fill="url(#chakraGoldFire)"/></g>
+
+    <!-- Outer Circular Golden Rim with Beads -->
+    <circle cx="50" cy="50" r="38" stroke="url(#chakraGoldFire)" stroke-width="2.2" fill="none"/>
+    <circle cx="50" cy="50" r="34.5" stroke="#FFF7C2" stroke-width="1.2" stroke-dasharray="1.5 2.5" fill="none"/>
+
+    <!-- 16 Radiant Spokes -->
+    <g transform="rotate(0.0 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(22.5 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(45.0 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(67.5 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(90.0 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(112.5 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(135.0 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(157.5 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(180.0 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(202.5 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(225.0 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(247.5 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(270.0 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(292.5 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(315.0 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g><g transform="rotate(337.5 50 50)"><line x1="50" y1="31" x2="50" y2="13" stroke="#FFF7C2" stroke-width="1.4" stroke-linecap="round"/><circle cx="50" cy="20" r="1.1" fill="#F39C12"/></g>
+
+    <!-- Inner Lotus Hub -->
+    <circle cx="50" cy="50" r="26" stroke="#F1C40F" stroke-width="1.2" fill="none"/>
+    <path d="M 50 31 C 47 38, 47 42, 50 44 C 53 42, 53 38, 50 31 Z" transform="rotate(0 50 50)" fill="#E67E22" opacity="0.9"/><path d="M 50 31 C 47 38, 47 42, 50 44 C 53 42, 53 38, 50 31 Z" transform="rotate(45 50 50)" fill="#E67E22" opacity="0.9"/><path d="M 50 31 C 47 38, 47 42, 50 44 C 53 42, 53 38, 50 31 Z" transform="rotate(90 50 50)" fill="#E67E22" opacity="0.9"/><path d="M 50 31 C 47 38, 47 42, 50 44 C 53 42, 53 38, 50 31 Z" transform="rotate(135 50 50)" fill="#E67E22" opacity="0.9"/><path d="M 50 31 C 47 38, 47 42, 50 44 C 53 42, 53 38, 50 31 Z" transform="rotate(180 50 50)" fill="#E67E22" opacity="0.9"/><path d="M 50 31 C 47 38, 47 42, 50 44 C 53 42, 53 38, 50 31 Z" transform="rotate(225 50 50)" fill="#E67E22" opacity="0.9"/><path d="M 50 31 C 47 38, 47 42, 50 44 C 53 42, 53 38, 50 31 Z" transform="rotate(270 50 50)" fill="#E67E22" opacity="0.9"/><path d="M 50 31 C 47 38, 47 42, 50 44 C 53 42, 53 38, 50 31 Z" transform="rotate(315 50 50)" fill="#E67E22" opacity="0.9"/>
+    <circle cx="50" cy="50" r="18" fill="#180702" stroke="#F1C40F" stroke-width="1.6"/>
+
+    <!-- Central Solar Gem & Kaustubha Jewel -->
+    <circle cx="50" cy="50" r="11" fill="url(#chakraCoreGlow)"/>
+    <circle cx="50" cy="50" r="4.5" fill="#FFFFFF"/>
+    <circle cx="50" cy="50" r="2" fill="#FFEAA7"/>
+  </g>
+</svg>
+          </div>
+          <span class="chakra-btn-title">सुदर्शन चक्र</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="leelas-main-container">
+    
+    <!-- Hero Section for the Leelas Chronicle -->
+    <section class="leelas-hero-section">
+      <div class="leelas-hero-badge">
+        <span class="om-symbol">ॐ</span>
+        <span>दिव्य लीला ग्रंथ • SACRED CHRONICLES</span>
+      </div>
+
+      <h1 class="leelas-page-main-title">श्री कृष्ण लीला अमृत</h1>
+      <h2 class="leelas-page-sub-title">THE TRANSCENDENTAL LEELAS OF LORD SHRI KRISHNA</h2>
+
+      <!-- Sacred Inscription Verse -->
+      <div class="leelas-verse-card glass-card">
+        <p class="leelas-intro-hindi">
+          "भगवान श्री कृष्ण की प्रत्येक लीला में छिपा है प्रेम, कृपा, भक्ति और जीवन का परम रहस्य।"
+        </p>
+        <p class="leelas-intro-english">
+          "In every sacred pastime of Lord Krishna lies the supreme nectar of eternal love, grace, and divine wisdom."
+        </p>
+      </div>
+
+      <!-- Highlights & Overview Stats -->
+      <div class="leelas-stats-bar">
+        <div class="stat-pill glass-card">
+          <span class="stat-num">50</span>
+          <span class="stat-label">प्रमुख लीलाएँ • 50 LEELAS</span>
+        </div>
+        <div class="stat-pill glass-card">
+          <span class="stat-num">06</span>
+          <span class="stat-label">पावन अध्याय • 6 CHAPTERS</span>
+        </div>
+        <div class="stat-pill glass-card">
+          <span class="stat-num">सचित्र</span>
+          <span class="stat-label">दिव्य कला • SACRED ARTWORK</span>
+        </div>
+        <div class="stat-pill glass-card">
+          <span class="stat-num">द्विभाषी</span>
+          <span class="stat-label">HINDI &amp; ENGLISH</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chapter Pages Toolbar (6 Separate Pages + All Leelas Tab) -->
+    <nav class="leelas-page-toolbar" aria-label="Chapter Pages Navigation">
+      <div class="leelas-pages-nav" id="leelasPagesNav">
+        <button class="leela-page-tab active" data-page="1">
+          <span class="page-num">पृष्ठ 1</span>
+          <span class="page-name">बाल व गोकुल लीला</span>
+          <span class="page-range">लीला 1 - 10</span>
+        </button>
+        <button class="leela-page-tab" data-page="2">
+          <span class="page-num">पृष्ठ 2</span>
+          <span class="page-name">वृंदावन व सखा लीला</span>
+          <span class="page-range">लीला 11 - 22</span>
+        </button>
+        <button class="leela-page-tab" data-page="3">
+          <span class="page-num">पृष्ठ 3</span>
+          <span class="page-name">रास व निकुंज लीला</span>
+          <span class="page-range">लीला 23 - 28</span>
+        </button>
+        <button class="leela-page-tab" data-page="4">
+          <span class="page-num">पृष्ठ 4</span>
+          <span class="page-name">मथुरा व कंस लीला</span>
+          <span class="page-range">लीला 29 - 35</span>
+        </button>
+        <button class="leela-page-tab" data-page="5">
+          <span class="page-num">पृष्ठ 5</span>
+          <span class="page-name">द्वारकाधीश लीला</span>
+          <span class="page-range">लीला 36 - 43</span>
+        </button>
+        <button class="leela-page-tab" data-page="6">
+          <span class="page-num">पृष्ठ 6</span>
+          <span class="page-name">महाभारत व गीता लीला</span>
+          <span class="page-range">लीला 44 - 50</span>
+        </button>
+        <button class="leela-page-tab tab-all" data-page="all">
+          <span class="page-num">सम्पूर्ण ग्रंथ</span>
+          <span class="page-name">समस्त 50 लीलाएँ</span>
+          <span class="page-range">ALL 50 LEELAS</span>
+        </button>
+      </div>
+
+      <!-- Top Pagination Navigation Bar -->
+      <div class="leelas-pagination-bar glass-card">
+        <button class="page-arrow-btn" id="prevPageBtn" aria-label="Previous Page">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.4" fill="none">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>पिछला पृष्ठ / PREV PAGE</span>
+        </button>
+
+        <div class="page-indicator-wrap">
+          <span class="current-page-text" id="currentPageText">पृष्ठ १ / ६ • PAGE 1 OF 6</span>
+          <span class="current-chapter-title" id="currentChapterTitle">बाल व गोकुल लीला (Gokul & Bal Pastimes)</span>
+        </div>
+
+        <button class="page-arrow-btn" id="nextPageBtn" aria-label="Next Page">
+          <span>अगला पृष्ठ / NEXT PAGE</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.4" fill="none">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- The 50 Illustrated Leelas Cards Grid -->
+    <section class="leelas-cards-grid" id="leelasCardsGrid" role="feed" aria-label="Sacred Krishna Leelas Cards">
+      <!-- Dynamically populated with all 50 illustrated Leelas -->
+    </section>
+
+    <!-- Bottom Pagination Navigation Bar -->
+    <div class="leelas-pagination-bar leelas-pagination-bottom glass-card">
+      <button class="page-arrow-btn" id="prevPageBtnBottom" aria-label="Previous Page">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.4" fill="none">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>पिछला पृष्ठ / PREV PAGE</span>
+      </button>
+
+      <div class="page-indicator-wrap">
+        <span class="current-page-text" id="currentPageTextBottom">पृष्ठ १ / ६ • PAGE 1 OF 6</span>
+        <span class="current-chapter-title" id="currentChapterTitleBottom">बाल व गोकुल लीला (Gokul & Bal Pastimes)</span>
+      </div>
+
+      <button class="page-arrow-btn" id="nextPageBtnBottom" aria-label="Next Page">
+        <span>अगला पृष्ठ / NEXT PAGE</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.4" fill="none">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Devotional Footer -->
+    <footer class="leelas-footer glass-card">
+      <p class="footer-mantra">
+        "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे ।<br>
+        हरे राम हरे राम राम राम हरे हरे ॥"
+      </p>
+      <p class="footer-sub-mantra">
+        "O Supreme Lord Shri Krishna, O Radiant Srimati Radharani, please bless us with eternal bhakti and divine bliss."
+      </p>
+      <div class="footer-btn-row">
+        <a href="index.html" class="back-home-btn glass-btn">
+          <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>वापस मुख्य पृष्ठ / Back to Home</span>
+        </a>
+        <a href="about.html" class="back-home-btn glass-btn">
+          <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>शिल्पी परिचय / About Creator</span>
+        </a>
+        <button class="back-home-btn glass-btn" id="backToTopBtn">
+          <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+          </svg>
+          <span>पृष्ठ के शीर्ष पर जाएँ / Top of Page</span>
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Interactive Toast Notification -->
+  <div class="toast glass-toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Divine Flute Audio Track -->
+  <audio id="fluteAudio" preload="auto" loop>
+    <source src="https://res.cloudinary.com/acggupzy/video/upload/v1791861453/WhatsApp_Audio_2026-10-12_at_6.56.35_PM.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Custom Inverted Peacock Feather & Text White Dot Cursor -->
+  <div class="custom-cursor cursor-mode-feather" id="customCursor" aria-hidden="true">
+    <!-- Peacock Feather Quill (Writing Tip Pointer at 1px, 7px, Feather Side Lower, Inclined 20% from left) -->
+    <div class="cursor-feather" id="cursorFeather">
+      <img src="assets/peacock_feather_cursor.png" alt="Peacock Feather" class="feather-cursor-img">
+      <span class="feather-nip-sparkle"></span>
+    </div>
+
+    <!-- White Dot Cursor (active on text hover) -->
+    <div class="cursor-dot" id="cursorDot"></div>
+  </div>
+
+  <script src="leelas.js"></script>
+</body>
+</html>

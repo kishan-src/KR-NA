@@ -7,8 +7,10 @@
   <meta name="description" content="Devotional hero section dedicated to Radha and Krishna featuring 3D depth typography with divine hands layered over texts, animated video background, Glass UI aesthetics, and directional hover stretch navigation.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300&family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="about.css">
+  <link rel="stylesheet" href="dahi-handi.css">
 </head>
 <body>
   <!-- Main Hero Viewport -->
@@ -29,6 +31,8 @@
       </video>
       <!-- Atmospheric Glass Depth Vignette Overlay -->
       <div class="video-vignette-overlay" id="videoOverlay"></div>
+      <!-- Cursor Interactive Spotlight Illumination Layers -->
+      <div class="video-spotlight-beam" id="videoSpotlightBeam"></div>
     </div>
 
     <!-- Top Navigation Header -->
@@ -114,7 +118,10 @@
     </aside>
 
     <!-- Center 3D Depth Typography & Foreground Divine Hands Stage -->
-    <section class="hero-center-content" id="heroCenterStage">
+    
+    <!-- View 01: Home Hero View -->
+    <section id="view-home" class="spa-view active">
+<section class="hero-center-content" id="heroCenterStage">
       <div class="depth-hero-stage" id="depthStage">
         
         <!-- Background Layer: Main Title "RADHA KRISHNA" (layered behind hands) -->
@@ -201,6 +208,840 @@
         </div>
       </div>
     </footer>
+    </section>
+
+    <!-- View 02: About Creator View (Big Screen Presentation) -->
+    <section id="view-about" class="spa-view">
+<section class="about-hero">
+      <div class="about-sanskrit-tag">
+        <span>॥ ॐ श्री कृष्णाय नमः ॥</span>
+        <span>•</span>
+        <span>SHILPI PARICHAY</span>
+      </div>
+      <h1 class="about-hero-title">ABOUT THE CREATOR &amp; DEVOTIONAL VISION</h1>
+      <p class="about-hero-subtitle">
+        A sacred digital sanctum blending timeless Vedic Bhakti with cutting-edge Full Stack Web Craftsmanship, 
+        conceptualized and developed in the eternal spiritual capital of Varanasi.
+      </p>
+    </section>
+
+    <!-- Master Creator Profile Card -->
+    <section class="creator-master-card" id="creatorProfile">
+      <div class="creator-layout">
+        
+        <!-- Left Column: Celestial Monogram Avatar -->
+        <div class="creator-avatar-column">
+          <div class="creator-avatar-wrap">
+            <div class="creator-avatar">
+              <span class="avatar-monogram">KR</span>
+            </div>
+            <div class="creator-avatar-halo"></div>
+            <div class="creator-avatar-halo-outer"></div>
+          </div>
+        </div>
+
+        <!-- Right Column: Personal Information & Credentials -->
+        <div class="creator-details">
+          <div class="creator-badges-row">
+            <span class="role-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+              CREATOR &amp; DEVELOPER
+            </span>
+            <span class="location-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              VARANASI, INDIA
+            </span>
+          </div>
+
+          <h2 class="creator-full-name">KISHAN RAI</h2>
+
+          <div class="creator-credentials">
+            <div class="cred-item">
+              <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 18l6-6-6-6"></path>
+                <path d="M8 6l-6 6 6 6"></path>
+              </svg>
+              <span>Student of <strong>Full Stack Web Development</strong></span>
+            </div>
+
+            <div class="cred-item">
+              <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+              <span>Learning &amp; Engineering at <strong>SARTHAK TECH</strong></span>
+            </div>
+
+            <div class="cred-item">
+              <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #00CEC9;">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>Situated near <strong>SUNBEAM SCHOOL (LAHARTARA), VARANASI</strong>, Uttar Pradesh</span>
+            </div>
+          </div>
+
+          <div class="creator-quote-strip">
+            "Coding is not merely about instructions for browsers; when guided by devotion, it transforms into an art of offering — where every pixel, motion, and line of code resonates with peace, reverence, and beauty."
+          </div>
+
+          <!-- Direct GitHub Action & Exploration -->
+          <div class="creator-actions-row">
+            <a href="https://github.com/kishan-src" target="_blank" rel="noopener noreferrer" class="btn-github-large" id="githubCreatorLink" title="Visit Kishan Rai's GitHub Profile">
+              <svg class="github-octo-icon" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+              </svg>
+              <span>VISIT GITHUB • @kishan-src</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+
+            <a href="#home" class="btn-home-return" onclick="window.switchView('home'); return false;">
+              <span>EXPLORE HOME EXPERIENCE</span>
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Narrative Section: My Thoughts, Vision & Inspiration on Big Screen -->
+    <section class="about-narrative-section">
+      <div class="section-headline-wrap">
+        <span class="section-eyebrow">
+          <svg class="eyebrow-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+            <path d="M12 2L14.2 8.8L21 11L14.2 13.2L12 20L9.8 13.2L3 11L9.8 8.8L12 2Z" fill="url(#sparkleGrad1)"/>
+            <path d="M19 16L20 18.5L22.5 19.5L20 20.5L19 23L18 20.5L15.5 19.5L18 18.5L19 16Z" fill="#ffd700"/>
+            <path d="M5 3L5.8 4.8L7.5 5.5L5.8 6.2L5 8L4.2 6.2L2.5 5.5L4.2 4.8L5 3Z" fill="#ffe082"/>
+            <defs>
+              <linearGradient id="sparkleGrad1" x1="12" y1="2" x2="12" y2="20" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="40%" stop-color="#ffd54f"/>
+                <stop offset="100%" stop-color="#ff9800"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>DEVOTIONAL PHILOSOPHY &amp; JOURNEY</span>
+        </span>
+        <h2 class="section-main-heading">THE THOUGHTS BEHIND THIS CREATION</h2>
+      </div>
+
+      <div class="thoughts-narrative-grid">
+        
+        <!-- Pillar 1: Sacred Genesis -->
+        <article class="thought-card">
+          <div class="thought-card-top">
+            <span class="thought-pillar-num">PILLAR 01</span>
+            <span class="thought-icon-symbol">
+              <svg class="devotional-svg-icon" viewBox="0 0 48 48" width="34" height="34" fill="none" aria-hidden="true">
+                <path d="M6 34C14 30 20 33 24 38C28 33 34 30 42 34C38 41 28 43 24 43C20 43 10 41 6 34Z" fill="url(#lotusLeafGrad1)"/>
+                <path d="M24 36C17 33 8 26 10 18C16 16 22 24 24 36Z" fill="url(#lotusOuterPink1)"/>
+                <path d="M24 36C31 33 40 26 38 18C32 16 26 24 24 36Z" fill="url(#lotusOuterPink1)"/>
+                <path d="M24 36C18 31 13 21 17 12C23 13 24 26 24 36Z" fill="url(#lotusMidPink1)"/>
+                <path d="M24 36C30 31 35 21 31 12C25 13 24 26 24 36Z" fill="url(#lotusMidPink1)"/>
+                <path d="M24 37C20 28 19 14 24 6C29 14 28 28 24 37Z" fill="url(#lotusCenterPink1)"/>
+                <ellipse cx="24" cy="27" rx="3.5" ry="2.5" fill="#ffd54f"/>
+                <defs>
+                  <linearGradient id="lotusLeafGrad1" x1="24" y1="30" x2="24" y2="43" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#4caf50"/>
+                    <stop offset="100%" stop-color="#2e7d32"/>
+                  </linearGradient>
+                  <linearGradient id="lotusOuterPink1" x1="24" y1="16" x2="24" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ff80ab"/>
+                    <stop offset="60%" stop-color="#f06292"/>
+                    <stop offset="100%" stop-color="#ad1457"/>
+                  </linearGradient>
+                  <linearGradient id="lotusMidPink1" x1="24" y1="12" x2="24" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffb2dd"/>
+                    <stop offset="50%" stop-color="#f48fb1"/>
+                    <stop offset="100%" stop-color="#c2185b"/>
+                  </linearGradient>
+                  <linearGradient id="lotusCenterPink1" x1="24" y1="6" x2="24" y2="37" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="35%" stop-color="#fce4ec"/>
+                    <stop offset="70%" stop-color="#f06292"/>
+                    <stop offset="100%" stop-color="#d81b60"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+          </div>
+          <h3 class="thought-card-title">A Labor of Eternal Love for Radha Krishna</h3>
+          <div class="thought-card-body">
+            <p>
+              This portal was born out of a deep inner yearning to create a digital temple dedicated to 
+              <strong>Lord Shri Krishna &amp; Shrimati Radharani</strong>. In Vedic wisdom, Radha and Krishna are not separate entities; 
+              Krishna is the supreme transcendental truth, and Radha is His eternal divine pleasure potency (<em>Hladini Shakti</em>).
+            </p>
+            <p>
+              I wanted to build an experience where anyone entering from any corner of the world could immediately feel that sweet, soothing, 
+              transcendental grace. Every visual element — from the sacred flute melody to the cosmic darkness illuminating with glowing stars — 
+              was shaped to invoke inner stillness and divine remembrance.
+            </p>
+          </div>
+        </article>
+
+        <!-- Pillar 2: The Spiritual Soul of Varanasi -->
+        <article class="thought-card">
+          <div class="thought-card-top">
+            <span class="thought-pillar-num">PILLAR 02</span>
+            <span class="thought-icon-symbol">
+              <svg class="devotional-svg-icon" viewBox="0 0 48 48" width="34" height="34" fill="none" aria-hidden="true">
+                <circle cx="24" cy="24" r="21" fill="url(#omHaloGrad1)" opacity="0.3"/>
+                <circle cx="24" cy="24" r="20" stroke="url(#omGoldGrad1)" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <path d="M19 14.5C21 14.5 22.8 15.6 23.5 17.2C24.2 15.6 26 14.5 28 14.5C31 14.5 33.5 17 33.5 20C33.5 24 29 27.5 25.5 30C29.5 29 33 31.5 33.5 35.5C34 39.5 30.5 42 27 42C24 42 22 40 21 38" stroke="url(#omGoldGrad1)" stroke-width="2.8" stroke-linecap="round"/>
+                <path d="M14 21C14 17 17 14 20.5 14C23.5 14 25.5 16 26 18C26 21 24 23 22 24C19 25.5 15 28 15 32C15 37 19 41 24 41C29 41 33 37.5 34 33" stroke="url(#omGoldGrad1)" stroke-width="2.8" stroke-linecap="round"/>
+                <path d="M29 9C32 9 35 10.5 36.5 12" stroke="url(#omGoldGrad1)" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="37" cy="7.5" r="1.8" fill="#ffd54f"/>
+                <defs>
+                  <linearGradient id="omGoldGrad1" x1="14" y1="7" x2="36" y2="42" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffe082"/>
+                    <stop offset="45%" stop-color="#ffb300"/>
+                    <stop offset="85%" stop-color="#ff6f00"/>
+                    <stop offset="100%" stop-color="#e65100"/>
+                  </linearGradient>
+                  <radialGradient id="omHaloGrad1" cx="24" cy="24" r="21" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffca28" stop-opacity="0.6"/>
+                    <stop offset="100%" stop-color="#ff6f00" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+              </svg>
+            </span>
+          </div>
+          <h3 class="thought-card-title">Rooted in the Holy City of Kashi (Varanasi)</h3>
+          <div class="thought-card-body">
+            <p>
+              Being situated in <strong>Varanasi near Lahartara</strong> provides a unique spiritual atmosphere that profoundly shapes my perspective. 
+              Kashi is the city of light, where the holy Ganges flows, where ancient temple bells echo in the twilight, and where the air is steeped in millennia of Bhakti and wisdom.
+            </p>
+            <p>
+              Walking these grounds while studying technology instills a sense of responsibility: that our modern creations should have soul, depth, 
+              and respect for our sacred heritage. This project is my humble tribute rooted in the soil of Varanasi.
+            </p>
+          </div>
+        </article>
+
+        <!-- Pillar 3: Learning at Sarthak Tech -->
+        <article class="thought-card">
+          <div class="thought-card-top">
+            <span class="thought-pillar-num">PILLAR 03</span>
+            <span class="thought-icon-symbol">
+              <svg class="devotional-svg-icon" viewBox="0 0 48 48" width="34" height="34" fill="none" aria-hidden="true">
+                <rect x="9" y="10" width="30" height="20" rx="2.5" fill="#0d1b2a" stroke="url(#laptopScreenBorder1)" stroke-width="2"/>
+                <rect x="11.5" y="12.5" width="25" height="15" rx="1" fill="#0a192f"/>
+                <path d="M17 17L14.5 20L17 23" stroke="#00e5ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M31 17L33.5 20L31 23" stroke="#00e5ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M25 16L23 24" stroke="#ff80ab" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M4 32H44L40 37H8L4 32Z" fill="url(#laptopBaseGrad1)"/>
+                <rect x="21" y="32.5" width="6" height="1.8" rx="0.9" fill="#90caf9"/>
+                <defs>
+                  <linearGradient id="laptopScreenBorder1" x1="9" y1="10" x2="39" y2="30" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#80d8ff"/>
+                    <stop offset="50%" stop-color="#2979ff"/>
+                    <stop offset="100%" stop-color="#1565c0"/>
+                  </linearGradient>
+                  <linearGradient id="laptopBaseGrad1" x1="4" y1="32" x2="44" y2="37" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#b0bec5"/>
+                    <stop offset="50%" stop-color="#cfd8dc"/>
+                    <stop offset="100%" stop-color="#78909c"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+          </div>
+          <h3 class="thought-card-title">Mastering Full Stack Development at Sarthak Tech</h3>
+          <div class="thought-card-body">
+            <p>
+              My journey as a student at <strong>SARTHAK TECH</strong> (near Sunbeam School, Lahartara) has been about turning passion into professional engineering capabilities. 
+              Learning full stack web development here taught me how to think critically about system architecture, performance, accessibility, and visual elegance.
+            </p>
+            <p>
+              Instead of relying on heavy pre-packaged templates, I challenge myself to craft custom CSS layouts, implement complex 3D parallax depth math, 
+              and design interactive elements from scratch. Sarthak Tech has given me the foundation to build applications that are both robust and visually mesmerizing.
+            </p>
+          </div>
+        </article>
+
+        <!-- Pillar 4: The Art of Cursor & Fluid Interaction -->
+        <article class="thought-card">
+          <div class="thought-card-top">
+            <span class="thought-pillar-num">PILLAR 04</span>
+            <span class="thought-icon-symbol">
+              <svg class="devotional-svg-icon" viewBox="0 0 48 48" width="34" height="34" fill="none" aria-hidden="true">
+                <path d="M10 42C18 34 26 22 36 6" stroke="#8d6e63" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M22 28C17 22 18 14 26 10C29 14 28 22 22 28Z" fill="url(#featherGreenGrad1)"/>
+                <path d="M24 27C31 23 34 15 30 8C25 11 23 19 24 27Z" fill="url(#featherGreenGrad1)"/>
+                <ellipse cx="27" cy="15" rx="6.5" ry="8" transform="rotate(25 27 15)" fill="#fbc02d"/>
+                <ellipse cx="27" cy="15" rx="4.5" ry="5.8" transform="rotate(25 27 15)" fill="#00e5ff"/>
+                <ellipse cx="27" cy="15" rx="2.8" ry="3.8" transform="rotate(25 27 15)" fill="#1a237e"/>
+                <circle cx="28" cy="13.5" r="0.9" fill="#ffffff"/>
+                <defs>
+                  <linearGradient id="featherGreenGrad1" x1="18" y1="8" x2="34" y2="28" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#76ff03"/>
+                    <stop offset="45%" stop-color="#00e676"/>
+                    <stop offset="100%" stop-color="#00897b"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+          </div>
+          <h3 class="thought-card-title">Crafting Sacred Interactive Physics</h3>
+          <div class="thought-card-body">
+            <p>
+              A distinctive highlight of this portal is the <strong>Inverted Peacock Feather (Mayur Pankh) Quill Cursor</strong>. 
+              The peacock feather is Krishna's most sacred adornment. In this site, the precision writing nip serves as the pointer's head, 
+              delicately inclined at 20%, bringing an authentic antique quill pen feel to the screen.
+            </p>
+            <p>
+              Upon clicking, rather than a generic flash, a realistic <strong>submerging water droplet ripple pulse</strong> spreads across the viewport 
+              like a crystal drop entering sacred Yamuna waters. These subtle micro-interactions represent the synergy between code and emotion.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Technical Craftsmanship Matrix -->
+    <section class="about-craftsmanship-section">
+      <div class="section-headline-wrap">
+        <span class="section-eyebrow">
+          <svg class="eyebrow-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="url(#boltGrad1)" stroke="#ffa000" stroke-width="1.2" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="boltGrad1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="30%" stop-color="#ffee58"/>
+                <stop offset="70%" stop-color="#fbc02d"/>
+                <stop offset="100%" stop-color="#f57f17"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>BEHIND THE CODE</span>
+        </span>
+        <h2 class="section-main-heading">CRAFTSMANSHIP &amp; ARCHITECTURE</h2>
+      </div>
+
+      <div class="craft-matrix-grid">
+        <div class="craft-card">
+          <div class="craft-icon-wrap">
+            <svg class="craft-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <h4>3D Depth Parallax Engine</h4>
+          <p>Multi-layered spatial arrangement where Lord Krishna's divine hands float in front of background typography, with intelligent proximity hover transparency.</p>
+        </div>
+
+        <div class="craft-card">
+          <div class="craft-icon-wrap">
+            <svg class="craft-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="6"></circle>
+              <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+          </div>
+          <h4>Water Submerge Ripple Physics</h4>
+          <p>Mathematical concentric wave simulation with cubic-bezier dampening, creating a lifelike droplet submersion effect with every mouse click.</p>
+        </div>
+
+        <div class="craft-card">
+          <div class="craft-icon-wrap">
+            <svg class="craft-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h4>Bilingual Leela Chronicles</h4>
+          <p>50 transcendental leelas authored with synchronized Hindi-English bilingual narratives, numerical indexing, and instant keyword searching.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Big Screen GitHub Showcase & Connect Banner -->
+    <section class="github-showcase-banner">
+      <div class="github-banner-left">
+        <svg class="github-big-logo" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+        </svg>
+        <div class="github-banner-text">
+          <h3>Explore My Code on GitHub</h3>
+          <p>I welcome you to inspect the source code, star the repository, or connect with me for full stack development collaborations.</p>
+          <span class="github-url-chip">https://github.com/kishan-src</span>
+        </div>
+      </div>
+
+      <div class="github-banner-right">
+        <a href="https://github.com/kishan-src" target="_blank" rel="noopener noreferrer" class="btn-github-large">
+          <span>OPEN GITHUB PROFILE</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+    </section>
+<footer class="about-page-footer">
+    <p class="footer-maha-mantra">
+      "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे ।<br>
+      हरे राम हरे राम राम राम हरे हरे ॥"
+    </p>
+
+    <div class="footer-nav-links">
+      <a href="#home" class="footer-nav-link" onclick="window.switchView('home'); return false;">Home (Swagatam)</a>
+      <span style="color: rgba(255,255,255,0.3);">•</span>
+      <a href="#about" class="footer-nav-link" onclick="window.switchView('about'); return false;" style="color: #FFEAA7;">About Creator</a>
+      <span style="color: rgba(255,255,255,0.3);">•</span>
+      <a href="#leelas" class="footer-nav-link" onclick="window.switchView('leelas'); return false;">50 Sacred Leelas</a>
+      <span style="color: rgba(255,255,255,0.3);">•</span>
+      <a href="https://github.com/kishan-src" target="_blank" rel="noopener noreferrer" class="footer-nav-link">GitHub @kishan-src</a>
+    </div>
+
+    <p class="footer-copy-text">
+      Crafted with Bhakti &amp; Modern Web Craftsmanship by <strong>Kishan Rai</strong> • Full Stack Development Student at Sarthak Tech, Varanasi.
+    </p>
+  </footer>
+    </section>
+
+    <!-- View 03: Leelas View (All 50 Illustrated Leelas & Chapters) -->
+    <section id="view-leelas" class="spa-view">
+<section class="leelas-hero-section">
+      <div class="leelas-hero-badge">
+        <span class="om-symbol">ॐ</span>
+        <span>दिव्य लीला ग्रंथ • SACRED CHRONICLES</span>
+      </div>
+
+      <h1 class="leelas-page-main-title">श्री कृष्ण लीला अमृत</h1>
+      <h2 class="leelas-page-sub-title">THE TRANSCENDENTAL LEELAS OF LORD SHRI KRISHNA</h2>
+
+      <!-- Sacred Inscription Verse -->
+      <div class="leelas-verse-card glass-card">
+        <p class="leelas-intro-hindi">
+          "भगवान श्री कृष्ण की प्रत्येक लीला में छिपा है प्रेम, कृपा, भक्ति और जीवन का परम रहस्य।"
+        </p>
+        <p class="leelas-intro-english">
+          "In every sacred pastime of Lord Krishna lies the supreme nectar of eternal love, grace, and divine wisdom."
+        </p>
+      </div>
+
+      <!-- Highlights & Overview Stats -->
+      <div class="leelas-stats-bar">
+        <div class="stat-pill glass-card">
+          <span class="stat-num">50</span>
+          <span class="stat-label">प्रमुख लीलाएँ • 50 LEELAS</span>
+        </div>
+        <div class="stat-pill glass-card">
+          <span class="stat-num">06</span>
+          <span class="stat-label">पावन अध्याय • 6 CHAPTERS</span>
+        </div>
+        <div class="stat-pill glass-card">
+          <span class="stat-num">सचित्र</span>
+          <span class="stat-label">दिव्य कला • SACRED ARTWORK</span>
+        </div>
+        <div class="stat-pill glass-card">
+          <span class="stat-num">द्विभाषी</span>
+          <span class="stat-label">HINDI &amp; ENGLISH</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chapter Pages Toolbar (6 Separate Pages + All Leelas Tab) -->
+    <nav class="leelas-page-toolbar" aria-label="Chapter Pages Navigation">
+      <div class="leelas-pages-nav" id="leelasPagesNav">
+        <button class="leela-page-tab active" data-page="1">
+          <span class="page-num">पृष्ठ 1</span>
+          <span class="page-name">बाल व गोकुल लीला</span>
+          <span class="page-range">लीला 1 - 10</span>
+        </button>
+        <button class="leela-page-tab" data-page="2">
+          <span class="page-num">पृष्ठ 2</span>
+          <span class="page-name">वृंदावन व सखा लीला</span>
+          <span class="page-range">लीला 11 - 22</span>
+        </button>
+        <button class="leela-page-tab" data-page="3">
+          <span class="page-num">पृष्ठ 3</span>
+          <span class="page-name">रास व निकुंज लीला</span>
+          <span class="page-range">लीला 23 - 28</span>
+        </button>
+        <button class="leela-page-tab" data-page="4">
+          <span class="page-num">पृष्ठ 4</span>
+          <span class="page-name">मथुरा व कंस लीला</span>
+          <span class="page-range">लीला 29 - 35</span>
+        </button>
+        <button class="leela-page-tab" data-page="5">
+          <span class="page-num">पृष्ठ 5</span>
+          <span class="page-name">द्वारकाधीश लीला</span>
+          <span class="page-range">लीला 36 - 43</span>
+        </button>
+        <button class="leela-page-tab" data-page="6">
+          <span class="page-num">पृष्ठ 6</span>
+          <span class="page-name">महाभारत व गीता लीला</span>
+          <span class="page-range">लीला 44 - 50</span>
+        </button>
+        <button class="leela-page-tab tab-all" data-page="all">
+          <span class="page-num">सम्पूर्ण ग्रंथ</span>
+          <span class="page-name">समस्त 50 लीलाएँ</span>
+          <span class="page-range">ALL 50 LEELAS</span>
+        </button>
+      </div>
+
+      <!-- Top Pagination Navigation Bar -->
+      <div class="leelas-pagination-bar glass-card">
+        <button class="page-arrow-btn" id="prevPageBtn" aria-label="Previous Page">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.4" fill="none">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>पिछला पृष्ठ / PREV PAGE</span>
+        </button>
+
+        <div class="page-indicator-wrap">
+          <span class="current-page-text" id="currentPageText">पृष्ठ १ / ६ • PAGE 1 OF 6</span>
+          <span class="current-chapter-title" id="currentChapterTitle">बाल व गोकुल लीला (Gokul & Bal Pastimes)</span>
+        </div>
+
+        <button class="page-arrow-btn" id="nextPageBtn" aria-label="Next Page">
+          <span>अगला पृष्ठ / NEXT PAGE</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.4" fill="none">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- The 50 Illustrated Leelas Cards Grid -->
+    <section class="leelas-cards-grid" id="leelasCardsGrid" role="feed" aria-label="Sacred Krishna Leelas Cards">
+      <!-- Dynamically populated with all 50 illustrated Leelas -->
+    </section>
+
+    <!-- Bottom Pagination Navigation Bar -->
+    <div class="leelas-pagination-bar leelas-pagination-bottom glass-card">
+      <button class="page-arrow-btn" id="prevPageBtnBottom" aria-label="Previous Page">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.4" fill="none">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>पिछला पृष्ठ / PREV PAGE</span>
+      </button>
+
+      <div class="page-indicator-wrap">
+        <span class="current-page-text" id="currentPageTextBottom">पृष्ठ १ / ६ • PAGE 1 OF 6</span>
+        <span class="current-chapter-title" id="currentChapterTitleBottom">बाल व गोकुल लीला (Gokul & Bal Pastimes)</span>
+      </div>
+
+      <button class="page-arrow-btn" id="nextPageBtnBottom" aria-label="Next Page">
+        <span>अगला पृष्ठ / NEXT PAGE</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.4" fill="none">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Devotional Footer -->
+    <footer class="leelas-footer glass-card">
+      <p class="footer-mantra">
+        "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे ।<br>
+        हरे राम हरे राम राम राम हरे हरे ॥"
+      </p>
+      <p class="footer-sub-mantra">
+        "O Supreme Lord Shri Krishna, O Radiant Srimati Radharani, please bless us with eternal bhakti and divine bliss."
+      </p>
+      <div class="footer-btn-row">
+        <a href="#home" class="back-home-btn glass-btn" onclick="window.switchView('home'); return false;">
+          <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>वापस मुख्य पृष्ठ / Back to Home</span>
+        </a>
+        <a href="#about" class="back-home-btn glass-btn" onclick="window.switchView('about'); return false;">
+          <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>शिल्पी परिचय / About Creator</span>
+        </a>
+        <button class="back-home-btn glass-btn" id="backToTopBtn">
+          <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+          </svg>
+          <span>पृष्ठ के शीर्ष पर जाएँ / Top of Page</span>
+        </button>
+      </div>
+    </footer>
+    </section>
+
+    <!-- View 04: Darshan View (Temple Sanctum, Aarti & Gita Teachings) -->
+    <section id="view-darshan" class="spa-view">
+      <div class="darshan-hero-section">
+        <div class="darshan-hero-badge">
+          <span class="om-symbol">ॐ</span>
+          <span>दिव्य दर्शन एवं अमृतवाणी • TEMPLE SANCTUM &amp; GITA TEACHINGS</span>
+        </div>
+        <h1 class="darshan-main-title">श्री राधा कृष्ण दिव्य दर्शन</h1>
+        <h2 class="darshan-sub-title">EXPERIENCE THE SACRED SANCTUMS OF VRINDAVAN &amp; MATHURA</h2>
+      </div>
+
+      <div class="darshan-grid">
+        <div class="darshan-card">
+          <div class="darshan-card-icon">
+            <svg class="darshan-svg-icon" viewBox="0 0 48 48" width="46" height="46" fill="none" aria-hidden="true">
+              <!-- Saffron Flag fluttering atop Temple Finial -->
+              <line x1="24" y1="2" x2="24" y2="10" stroke="#f59e0b" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M24 2.5 Q29 4 33 3 L30.5 7 Q27 6 24 7.5 Z" fill="url(#mandirFlagGrad)" stroke="#b91c1c" stroke-width="0.5"/>
+              
+              <!-- Golden Kalash & Amalaka Finial -->
+              <path d="M22 10.5 C22 8.5 24 7 24 7 C24 7 26 8.5 26 10.5 Z" fill="#ffd700"/>
+              <ellipse cx="24" cy="11" rx="3" ry="1.4" fill="#f59e0b"/>
+              
+              <!-- Shikhara Spire Tiers (North Indian Nagara Temple Style) -->
+              <path d="M20.5 13 L24 10.5 L27.5 13 L26.5 17 L21.5 17 Z" fill="url(#mandirSpireGold)"/>
+              <rect x="19.5" y="17" width="9" height="2.2" rx="0.8" fill="#d97706"/>
+              
+              <!-- Mid Tier Shikhara with decorative gavaksha arch -->
+              <path d="M17.5 19.2 L30.5 19.2 L29 25.5 L19 25.5 Z" fill="url(#mandirStoneGrad)"/>
+              <circle cx="24" cy="22.5" r="1.6" fill="#ffd700"/>
+              <rect x="16" y="25.5" width="16" height="2.2" rx="0.8" fill="#b45309"/>
+              
+              <!-- Sanctum Sanctorum (Garbhagriha) Body with Pillars -->
+              <path d="M13.5 27.7 L34.5 27.7 L35.5 38.5 L12.5 38.5 Z" fill="url(#mandirBodyGrad)"/>
+              
+              <!-- Mandap Columns -->
+              <rect x="14.5" y="29" width="3" height="9.5" rx="0.5" fill="#d97706"/>
+              <rect x="30.5" y="29" width="3" height="9.5" rx="0.5" fill="#d97706"/>
+              
+              <!-- Sacred Sanctum Entrance Archway glowing with inner divine light -->
+              <path d="M20 38.5 V32 C20 29.5 28 29.5 28 32 V38.5 Z" fill="#180e04" stroke="#f59e0b" stroke-width="1.2"/>
+              <ellipse cx="24" cy="34" rx="2.2" ry="3" fill="url(#mandirGlowGrad)"/>
+              <circle cx="24" cy="33.5" r="1.1" fill="#ffffff"/>
+              
+              <!-- Temple Foundation Plinth (Jagati Steps) -->
+              <rect x="9.5" y="38.5" width="29" height="3" rx="0.8" fill="#d97706"/>
+              <rect x="6.5" y="41.5" width="35" height="3.5" rx="1" fill="#92400e"/>
+              
+              <defs>
+                <linearGradient id="mandirFlagGrad" x1="24" y1="2" x2="33" y2="7" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ef4444"/>
+                  <stop offset="100%" stop-color="#dc2626"/>
+                </linearGradient>
+                <linearGradient id="mandirSpireGold" x1="24" y1="10" x2="24" y2="17" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffe082"/>
+                  <stop offset="60%" stop-color="#ffb300"/>
+                  <stop offset="100%" stop-color="#f57c00"/>
+                </linearGradient>
+                <linearGradient id="mandirStoneGrad" x1="24" y1="19" x2="24" y2="25" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#f59e0b"/>
+                  <stop offset="100%" stop-color="#b45309"/>
+                </linearGradient>
+                <linearGradient id="mandirBodyGrad" x1="24" y1="27" x2="24" y2="38" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#d97706"/>
+                  <stop offset="100%" stop-color="#78350f"/>
+                </linearGradient>
+                <radialGradient id="mandirGlowGrad" cx="24" cy="34" r="3" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="40%" stop-color="#fef08a"/>
+                  <stop offset="100%" stop-color="#f59e0b"/>
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+          <h3>बांके बिहारी मंदिर • वृंदावन</h3>
+          <h4>Shri Banke Bihari Sanctum</h4>
+          <p>The eternal abode of Thakurji where devotion dances in every curtain unveiling. Lord Krishna stands in the Tribhanga posture, showering blissful grace upon every longing soul.</p>
+        </div>
+
+        <div class="darshan-card">
+          <div class="darshan-card-icon">
+            <svg class="darshan-svg-icon" viewBox="0 0 48 48" width="46" height="46" fill="none" aria-hidden="true">
+              <!-- Broad Green Lotus Leaf Base -->
+              <path d="M6 34C14 30 20 33 24 38C28 33 34 30 42 34C38 41 28 43 24 43C20 43 10 41 6 34Z" fill="url(#darshanLotusLeaf)"/>
+              
+              <!-- Outer Radiant Petals (Magenta / Deep Pink) -->
+              <path d="M24 36C16 33 6 26 8 18C15 15 21 24 24 36Z" fill="url(#darshanLotusOuter)"/>
+              <path d="M24 36C32 33 42 26 40 18C33 15 27 24 24 36Z" fill="url(#darshanLotusOuter)"/>
+              
+              <!-- Mid Soft Petals (Lotus Rose) -->
+              <path d="M24 36C17 30 11 20 16 11C23 12 24 25 24 36Z" fill="url(#darshanLotusMid)"/>
+              <path d="M24 36C31 30 37 20 32 11C25 12 24 25 24 36Z" fill="url(#darshanLotusMid)"/>
+              
+              <!-- Center Pure Lotus Bud Petal -->
+              <path d="M24 37C19 27 18 13 24 5C30 13 29 27 24 37Z" fill="url(#darshanLotusCenter)"/>
+              
+              <!-- Golden Pollen Receptacle -->
+              <ellipse cx="24" cy="27" rx="3.8" ry="2.6" fill="#ffd54f"/>
+              
+              <defs>
+                <linearGradient id="darshanLotusLeaf" x1="24" y1="30" x2="24" y2="43" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#4caf50"/>
+                  <stop offset="100%" stop-color="#2e7d32"/>
+                </linearGradient>
+                <linearGradient id="darshanLotusOuter" x1="24" y1="16" x2="24" y2="36" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ff80ab"/>
+                  <stop offset="55%" stop-color="#f06292"/>
+                  <stop offset="100%" stop-color="#ad1457"/>
+                </linearGradient>
+                <linearGradient id="darshanLotusMid" x1="24" y1="11" x2="24" y2="36" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffb2dd"/>
+                  <stop offset="50%" stop-color="#f48fb1"/>
+                  <stop offset="100%" stop-color="#c2185b"/>
+                </linearGradient>
+                <linearGradient id="darshanLotusCenter" x1="24" y1="5" x2="24" y2="37" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="35%" stop-color="#fce4ec"/>
+                  <stop offset="70%" stop-color="#f06292"/>
+                  <stop offset="100%" stop-color="#d81b60"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <h3>राधा रानी महल • बरसाना</h3>
+          <h4>Shri Radha Rani Temple</h4>
+          <p>Perched atop the Bhanugarh hills, this sacred palace radiates the unalloyed divine love of Kishori Ji. The air carries the sweet scent of bhakti, divine surrender, and grace.</p>
+        </div>
+
+        <div class="darshan-card">
+          <div class="darshan-card-icon">
+            <svg class="darshan-svg-icon" viewBox="0 0 48 48" width="46" height="46" fill="none" aria-hidden="true">
+              <!-- Divine Aura Halo -->
+              <circle cx="24" cy="24" r="21" fill="url(#darshanOmHalo)" opacity="0.32"/>
+              <circle cx="24" cy="24" r="20" stroke="url(#darshanOmGold)" stroke-width="1.6" stroke-dasharray="3.5 3.5"/>
+              
+              <!-- Sacred Om Calligraphy in Pure Saffron & Gold -->
+              <path d="M19 14.5C21 14.5 22.8 15.6 23.5 17.2C24.2 15.6 26 14.5 28 14.5C31 14.5 33.5 17 33.5 20C33.5 24 29 27.5 25.5 30C29.5 29 33 31.5 33.5 35.5C34 39.5 30.5 42 27 42C24 42 22 40 21 38" stroke="url(#darshanOmGold)" stroke-width="2.9" stroke-linecap="round"/>
+              <path d="M14 21C14 17 17 14 20.5 14C23.5 14 25.5 16 26 18C26 21 24 23 22 24C19 25.5 15 28 15 32C15 37 19 41 24 41C29 41 33 37.5 34 33" stroke="url(#darshanOmGold)" stroke-width="2.9" stroke-linecap="round"/>
+              <path d="M29 9C32 9 35 10.5 36.5 12" stroke="url(#darshanOmGold)" stroke-width="2.3" stroke-linecap="round"/>
+              <circle cx="37" cy="7.5" r="2" fill="#ffd54f"/>
+              
+              <defs>
+                <linearGradient id="darshanOmGold" x1="14" y1="7" x2="36" y2="42" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffe082"/>
+                  <stop offset="40%" stop-color="#ffb300"/>
+                  <stop offset="80%" stop-color="#ff6f00"/>
+                  <stop offset="100%" stop-color="#e65100"/>
+                </linearGradient>
+                <radialGradient id="darshanOmHalo" cx="24" cy="24" r="21" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffca28" stop-opacity="0.6"/>
+                  <stop offset="100%" stop-color="#ff6f00" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+          <h3>श्री कृष्ण जन्मभूमि • मथुरा</h3>
+          <h4>Krishna Janmabhoomi Complex</h4>
+          <p>The sacred prison chamber where the Supreme Lord descended upon earth at midnight to annihilate evil and restore eternal cosmic dharma.</p>
+        </div>
+
+        <div class="darshan-card">
+          <div class="darshan-card-icon">
+            <svg class="darshan-svg-icon" viewBox="0 0 48 48" width="46" height="46" fill="none" aria-hidden="true">
+              <!-- Krishna's Royal Mukut / Golden Crown with Imperial Jewels -->
+              
+              <!-- Royal Crown Filigree Peaks -->
+              <path d="M7 35 L10 17 L17 25 L24 9 L31 25 L38 17 L41 35 Z" fill="url(#darshanCrownGold)" stroke="#d97706" stroke-width="1.3" stroke-linejoin="round"/>
+              
+              <!-- Crown Headband Plinth -->
+              <rect x="7" y="35" width="34" height="6.5" rx="2" fill="url(#darshanCrownBase)" stroke="#b45309" stroke-width="1.2"/>
+              
+              <!-- Crown Base Pearls -->
+              <circle cx="11.5" cy="38.2" r="1.6" fill="#ffffff" stroke="#ffb300" stroke-width="0.7"/>
+              <circle cx="17.8" cy="38.2" r="1.6" fill="#ffffff" stroke="#ffb300" stroke-width="0.7"/>
+              <circle cx="24" cy="38.2" r="1.9" fill="#ffffff" stroke="#ffb300" stroke-width="0.7"/>
+              <circle cx="30.2" cy="38.2" r="1.6" fill="#ffffff" stroke="#ffb300" stroke-width="0.7"/>
+              <circle cx="36.5" cy="38.2" r="1.6" fill="#ffffff" stroke="#ffb300" stroke-width="0.7"/>
+              
+              <!-- Center Jewel: Royal Teardrop Ruby on Pinnacle Crest -->
+              <path d="M24 3 C21.5 6.5 20.5 9 24 11 C27.5 9 26.5 6.5 24 3 Z" fill="url(#crownRubyGrad)" stroke="#ffd700" stroke-width="0.9"/>
+              <circle cx="24" cy="7" r="0.9" fill="#ffffff"/>
+              
+              <!-- Lateral Peak Sapphires -->
+              <circle cx="10" cy="17" r="2.5" fill="url(#crownSapphireGrad)" stroke="#ffd700" stroke-width="0.8"/>
+              <circle cx="38" cy="17" r="2.5" fill="url(#crownSapphireGrad)" stroke="#ffd700" stroke-width="0.8"/>
+              
+              <!-- Inner Dip Emeralds -->
+              <circle cx="17" cy="25" r="2.1" fill="url(#crownEmeraldGrad)" stroke="#ffd700" stroke-width="0.8"/>
+              <circle cx="31" cy="25" r="2.1" fill="url(#crownEmeraldGrad)" stroke="#ffd700" stroke-width="0.8"/>
+              
+              <!-- Center Imperial Royal Diamond-Cut Gem on Crown Face -->
+              <polygon points="24,19 28.5,25.5 24,32 19.5,25.5" fill="url(#crownRubyGrad)" stroke="#ffe082" stroke-width="1"/>
+              <polygon points="24,21.5 26.5,25.5 24,29.5 21.5,25.5" fill="#ff80ab" opacity="0.85"/>
+              
+              <defs>
+                <linearGradient id="darshanCrownGold" x1="24" y1="9" x2="24" y2="35" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#fff59d"/>
+                  <stop offset="35%" stop-color="#ffd54f"/>
+                  <stop offset="75%" stop-color="#ffb300"/>
+                  <stop offset="100%" stop-color="#ff8f00"/>
+                </linearGradient>
+                <linearGradient id="darshanCrownBase" x1="7" y1="35" x2="41" y2="41.5" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffca28"/>
+                  <stop offset="50%" stop-color="#ffb300"/>
+                  <stop offset="100%" stop-color="#ff8f00"/>
+                </linearGradient>
+                <radialGradient id="crownRubyGrad" cx="24" cy="25" r="6" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ff4081"/>
+                  <stop offset="60%" stop-color="#e91e63"/>
+                  <stop offset="100%" stop-color="#880e4f"/>
+                </radialGradient>
+                <radialGradient id="crownSapphireGrad" cx="0.4" cy="0.4" r="0.6">
+                  <stop offset="0%" stop-color="#e0f7fa"/>
+                  <stop offset="40%" stop-color="#00e5ff"/>
+                  <stop offset="100%" stop-color="#0288d1"/>
+                </radialGradient>
+                <radialGradient id="crownEmeraldGrad" cx="0.4" cy="0.4" r="0.6">
+                  <stop offset="0%" stop-color="#b9f6ca"/>
+                  <stop offset="45%" stop-color="#00e676"/>
+                  <stop offset="100%" stop-color="#00796b"/>
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+          <h3>द्वारकाधीश मंदिर • गुजरात</h3>
+          <h4>Dwarkadhish Jagat Mandir</h4>
+          <p>The golden kingdom where Lord Krishna ruled as the Supreme King of Kings, guiding righteousness across the cosmos with His boundless majesty.</p>
+        </div>
+      </div>
+
+      <div class="leelas-verse-card glass-card" style="max-width: 900px; margin: 0 auto 3rem;">
+        <p class="leelas-intro-hindi">
+          "सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज । अहं त्वां सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः ॥"
+        </p>
+        <p class="leelas-intro-english">
+          "Abandon all varieties of dharmas and surrender exclusively unto Me. I shall deliver you from all sinful reactions; fear no more." (Bhagavad Gita 18.66)
+        </p>
+      </div>
+
+      <footer class="about-page-footer">
+        <p class="footer-maha-mantra">
+          "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे ।<br>
+          हरे राम हरे राम राम राम हरे हरे ॥"
+        </p>
+        <div class="footer-nav-links">
+          <a href="#home" class="footer-nav-link" onclick="switchView('home'); return false;">Home</a>
+          <span style="color: rgba(255,255,255,0.3);">•</span>
+          <a href="#about" class="footer-nav-link" onclick="switchView('about'); return false;">About Creator</a>
+          <span style="color: rgba(255,255,255,0.3);">•</span>
+          <a href="#leelas" class="footer-nav-link" onclick="switchView('leelas'); return false;">50 Leelas</a>
+          <span style="color: rgba(255,255,255,0.3);">•</span>
+          <a href="https://github.com/kishan-src" target="_blank" rel="noopener noreferrer" class="footer-nav-link">GitHub @kishan-src</a>
+        </div>
+        <p class="footer-copy-text">
+          Radha Krishna Divine Portal • Designed &amp; Engineered by Kishan Rai (Sarthak Tech, Varanasi).
+        </p>
+      </footer>
+    </section>
+
+
 
     <!-- Slide / Drawer Navigation Menu Overlay -->
     <div class="drawer-overlay" id="drawerOverlay" aria-hidden="true">
@@ -219,24 +1060,20 @@
         </div>
 
         <nav class="drawer-nav">
-          <a href="#home" class="drawer-link active" data-slide="0">
+          <a href="#home" class="drawer-link active" data-nav="home">
             <span class="drawer-num">01</span>
             <span class="drawer-title">HOME (SWAGATAM)</span>
           </a>
-          <a href="#about" class="drawer-link" data-slide="1">
+          <a href="#about" class="drawer-link" data-nav="about">
             <span class="drawer-num">02</span>
-            <span class="drawer-title">THE DIVINE COUPLE</span>
+            <span class="drawer-title">ABOUT THE CREATOR</span>
           </a>
-          <a href="#leelas" class="drawer-link" data-slide="2">
+          <a href="#leelas" class="drawer-link" data-nav="leelas">
             <span class="drawer-num">03</span>
             <span class="drawer-title">SACRED VRINDAVAN LEELAS</span>
           </a>
-          <a href="#gita" class="drawer-link" data-slide="3">
+          <a href="#darshan" class="drawer-link" data-nav="darshan">
             <span class="drawer-num">04</span>
-            <span class="drawer-title">BHAGAVAD GITA TEACHINGS</span>
-          </a>
-          <a href="#darshan" class="drawer-link" data-slide="4">
-            <span class="drawer-num">05</span>
             <span class="drawer-title">TEMPLE &amp; DAILY DARSHAN</span>
           </a>
           <a href="#bhajans" class="drawer-link" data-slide="5">
@@ -283,12 +1120,30 @@
         </div>
       </div>
     </div>
-
     <!-- Interactive Toast Notification -->
     <div class="toast glass-toast" id="toast" role="status" aria-live="polite"></div>
 
+    <!-- Divine Flute Audio Track -->
+    <audio id="fluteAudio" preload="auto" loop>
+      <source src="https://res.cloudinary.com/acggupzy/video/upload/v1791861453/WhatsApp_Audio_2026-10-12_at_6.56.35_PM.mp3" type="audio/mpeg">
+    </audio>
   </main>
 
+  <!-- Custom Inverted Peacock Feather & Text White Dot Cursor -->
+  <div class="custom-cursor cursor-mode-feather" id="customCursor" aria-hidden="true">
+    <!-- Peacock Feather Quill (Writing Tip Pointer at 1px, 7px, Feather Side Lower, Inclined 20% from left) -->
+    <div class="cursor-feather" id="cursorFeather">
+      <img src="assets/peacock_feather_cursor.png" alt="Peacock Feather" class="feather-cursor-img">
+      <span class="feather-nip-sparkle"></span>
+    </div>
+
+    <!-- White Dot Cursor (active on text hover) -->
+    <div class="cursor-dot" id="cursorDot"></div>
+  </div>
+
+  <!-- Interactive Dahi Handi Loading Animation -->
+  <script src="dahi-handi.js"></script>
+  <script src="leelas-data.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

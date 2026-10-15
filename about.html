@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Kishan Rai • Creator & Devotional Vision | Radha Krishna Portal</title>
+  <meta name="description" content="Meet Kishan Rai, a full stack web development student at Sarthak Tech (near Sunbeam School, Lahartara, Varanasi). Discover the thoughts, devotion, and craftsmanship behind the Radha Krishna web portal.">
+  
+  <!-- Google Fonts: Cinzel, Montserrat, Outfit, Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="about.css">
+</head>
+<body class="about-page-body">
+
+  <!-- Animating Peacock Feather & Twinkling Celestial Background Video -->
+  <div class="video-bg-container" id="videoBgContainer" aria-hidden="true">
+    <video 
+      id="bgVideo" 
+      class="bg-video" 
+      autoplay 
+      loop 
+      muted 
+      playsinline 
+      preload="auto"
+    >
+      <source src="https://res.cloudinary.com/acggupzy/video/upload/v1791781565/Animating_feather_and_twinkling___20261012102408.mp4" type="video/mp4">
+    </video>
+    <!-- Atmospheric Depth Vignette -->
+    <div class="video-vignette-overlay" id="videoOverlay"></div>
+    <div class="video-spotlight-beam" id="videoSpotlightBeam"></div>
+  </div>
+
+  <!-- Sticky Top Glass Navigation Header -->
+  <header class="leelas-navbar glass-card">
+    <div class="leelas-navbar-inner">
+      <a href="index.html" class="leelas-brand-link" title="Return to Home • मुख्य पृष्ठ पर लौटें">
+        <span class="om-symbol">ॐ</span>
+        <div class="brand-text-col">
+          <span class="brand-title">RADHA KRISHNA PORTAL</span>
+          <span class="brand-subtitle">SHILPI PARICHAY • शिल्पी परिचय</span>
+        </div>
+      </a>
+
+      <div class="leelas-nav-actions">
+        <!-- Water Glass Page Navigation Capsule -->
+        <nav class="nav-page-capsule" aria-label="Page Navigation">
+          <a href="index.html" class="nav-page-pill">HOME</a>
+          <a href="about.html" class="nav-page-pill active">ABOUT</a>
+          <a href="leelas.html" class="nav-page-pill">LEELAS</a>
+        </nav>
+
+        <!-- Ambient Video Toggle Switch -->
+        <div class="glass-toggle-wrapper">
+          <button class="glass-toggle-btn active" id="bgVideoToggle" role="switch" aria-checked="true" aria-label="Toggle background animation" title="Toggle background video: Animated Feather & Stars vs Pure Black">
+            <span class="toggle-icon-wrap">
+              <svg class="toggle-icon icon-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </span>
+            <span class="toggle-label" id="toggleLabel">AMBIENT VIDEO</span>
+            <span class="toggle-switch-track">
+              <span class="toggle-switch-thumb"></span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Flute Audio Toggle Button -->
+        <button class="back-home-btn glass-btn" id="audioToggleBtn" title="Play / Pause Divine Flute Harmony">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
+          <span>DIVINE FLUTE</span>
+        </button>
+
+        <!-- Return Home Button -->
+        <a href="index.html" class="back-home-btn glass-btn" title="Back to Main Swagatam Page">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>HOME</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container (Big Screen Presentation) -->
+  <main class="about-main-container">
+
+    <!-- Hero Header -->
+    <section class="about-hero">
+      <div class="about-sanskrit-tag">
+        <span>॥ ॐ श्री कृष्णाय नमः ॥</span>
+        <span>•</span>
+        <span>SHILPI PARICHAY</span>
+      </div>
+      <h1 class="about-hero-title">ABOUT THE CREATOR &amp; DEVOTIONAL VISION</h1>
+      <p class="about-hero-subtitle">
+        A sacred digital sanctum blending timeless Vedic Bhakti with cutting-edge Full Stack Web Craftsmanship, 
+        conceptualized and developed in the eternal spiritual capital of Varanasi.
+      </p>
+    </section>
+
+    <!-- Master Creator Profile Card -->
+    <section class="creator-master-card" id="creatorProfile">
+      <div class="creator-layout">
+        
+        <!-- Left Column: Celestial Monogram Avatar -->
+        <div class="creator-avatar-column">
+          <div class="creator-avatar-wrap">
+            <div class="creator-avatar">
+              <span class="avatar-monogram">KR</span>
+            </div>
+            <div class="creator-avatar-halo"></div>
+            <div class="creator-avatar-halo-outer"></div>
+          </div>
+        </div>
+
+        <!-- Right Column: Personal Information & Credentials -->
+        <div class="creator-details">
+          <div class="creator-badges-row">
+            <span class="role-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+              CREATOR &amp; DEVELOPER
+            </span>
+            <span class="location-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              VARANASI, INDIA
+            </span>
+          </div>
+
+          <h2 class="creator-full-name">KISHAN RAI</h2>
+
+          <div class="creator-credentials">
+            <div class="cred-item">
+              <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 18l6-6-6-6"></path>
+                <path d="M8 6l-6 6 6 6"></path>
+              </svg>
+              <span>Student of <strong>Full Stack Web Development</strong></span>
+            </div>
+
+            <div class="cred-item">
+              <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+              <span>Learning &amp; Engineering at <strong>SARTHAK TECH</strong></span>
+            </div>
+
+            <div class="cred-item">
+              <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #00CEC9;">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>Situated near <strong>SUNBEAM SCHOOL (LAHARTARA), VARANASI</strong>, Uttar Pradesh</span>
+            </div>
+          </div>
+
+          <div class="creator-quote-strip">
+            "Coding is not merely about instructions for browsers; when guided by devotion, it transforms into an art of offering — where every pixel, motion, and line of code resonates with peace, reverence, and beauty."
+          </div>
+
+          <!-- Direct GitHub Action & Exploration -->
+          <div class="creator-actions-row">
+            <a href="https://github.com/kishan-src" target="_blank" rel="noopener noreferrer" class="btn-github-large" id="githubCreatorLink" title="Visit Kishan Rai's GitHub Profile">
+              <svg class="github-octo-icon" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+              </svg>
+              <span>VISIT GITHUB • @kishan-src</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+
+            <a href="index.html" class="btn-home-return">
+              <span>EXPLORE HOME EXPERIENCE</span>
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Narrative Section: My Thoughts, Vision & Inspiration on Big Screen -->
+    <section class="about-narrative-section">
+      <div class="section-headline-wrap">
+        <span class="section-eyebrow">
+          <svg class="eyebrow-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+            <path d="M12 2L14.2 8.8L21 11L14.2 13.2L12 20L9.8 13.2L3 11L9.8 8.8L12 2Z" fill="url(#sparkleGradAbout)"/>
+            <path d="M19 16L20 18.5L22.5 19.5L20 20.5L19 23L18 20.5L15.5 19.5L18 18.5L19 16Z" fill="#ffd700"/>
+            <path d="M5 3L5.8 4.8L7.5 5.5L5.8 6.2L5 8L4.2 6.2L2.5 5.5L4.2 4.8L5 3Z" fill="#ffe082"/>
+            <defs>
+              <linearGradient id="sparkleGradAbout" x1="12" y1="2" x2="12" y2="20" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="40%" stop-color="#ffd54f"/>
+                <stop offset="100%" stop-color="#ff9800"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>DEVOTIONAL PHILOSOPHY &amp; JOURNEY</span>
+        </span>
+        <h2 class="section-main-heading">THE THOUGHTS BEHIND THIS CREATION</h2>
+      </div>
+
+      <div class="thoughts-narrative-grid">
+        
+        <!-- Pillar 1: Sacred Genesis -->
+        <article class="thought-card">
+          <div class="thought-card-top">
+            <span class="thought-pillar-num">PILLAR 01</span>
+            <span class="thought-icon-symbol">
+              <svg class="devotional-svg-icon" viewBox="0 0 48 48" width="34" height="34" fill="none" aria-hidden="true">
+                <path d="M6 34C14 30 20 33 24 38C28 33 34 30 42 34C38 41 28 43 24 43C20 43 10 41 6 34Z" fill="url(#aboutLotusLeaf)"/>
+                <path d="M24 36C17 33 8 26 10 18C16 16 22 24 24 36Z" fill="url(#aboutLotusOuterPink)"/>
+                <path d="M24 36C31 33 40 26 38 18C32 16 26 24 24 36Z" fill="url(#aboutLotusOuterPink)"/>
+                <path d="M24 36C18 31 13 21 17 12C23 13 24 26 24 36Z" fill="url(#aboutLotusMidPink)"/>
+                <path d="M24 36C30 31 35 21 31 12C25 13 24 26 24 36Z" fill="url(#aboutLotusMidPink)"/>
+                <path d="M24 37C20 28 19 14 24 6C29 14 28 28 24 37Z" fill="url(#aboutLotusCenterPink)"/>
+                <ellipse cx="24" cy="27" rx="3.5" ry="2.5" fill="#ffd54f"/>
+                <defs>
+                  <linearGradient id="aboutLotusLeaf" x1="24" y1="30" x2="24" y2="43" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#4caf50"/>
+                    <stop offset="100%" stop-color="#2e7d32"/>
+                  </linearGradient>
+                  <linearGradient id="aboutLotusOuterPink" x1="24" y1="16" x2="24" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ff80ab"/>
+                    <stop offset="60%" stop-color="#f06292"/>
+                    <stop offset="100%" stop-color="#ad1457"/>
+                  </linearGradient>
+                  <linearGradient id="aboutLotusMidPink" x1="24" y1="12" x2="24" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffb2dd"/>
+                    <stop offset="50%" stop-color="#f48fb1"/>
+                    <stop offset="100%" stop-color="#c2185b"/>
+                  </linearGradient>
+                  <linearGradient id="aboutLotusCenterPink" x1="24" y1="6" x2="24" y2="37" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="35%" stop-color="#fce4ec"/>
+                    <stop offset="70%" stop-color="#f06292"/>
+                    <stop offset="100%" stop-color="#d81b60"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+          </div>
+          <h3 class="thought-card-title">A Labor of Eternal Love for Radha Krishna</h3>
+          <div class="thought-card-body">
+            <p>
+              This portal was born out of a deep inner yearning to create a digital temple dedicated to 
+              <strong>Lord Shri Krishna &amp; Shrimati Radharani</strong>. In Vedic wisdom, Radha and Krishna are not separate entities; 
+              Krishna is the supreme transcendental truth, and Radha is His eternal divine pleasure potency (<em>Hladini Shakti</em>).
+            </p>
+            <p>
+              I wanted to build an experience where anyone entering from any corner of the world could immediately feel that sweet, soothing, 
+              transcendental grace. Every visual element — from the sacred flute melody to the cosmic darkness illuminating with glowing stars — 
+              was shaped to invoke inner stillness and divine remembrance.
+            </p>
+          </div>
+        </article>
+
+        <!-- Pillar 2: The Spiritual Soul of Varanasi -->
+        <article class="thought-card">
+          <div class="thought-card-top">
+            <span class="thought-pillar-num">PILLAR 02</span>
+            <span class="thought-icon-symbol">
+              <svg class="devotional-svg-icon" viewBox="0 0 48 48" width="34" height="34" fill="none" aria-hidden="true">
+                <circle cx="24" cy="24" r="21" fill="url(#aboutOmHalo)" opacity="0.3"/>
+                <circle cx="24" cy="24" r="20" stroke="url(#aboutOmGold)" stroke-width="1.5" stroke-dasharray="3 3"/>
+                <path d="M19 14.5C21 14.5 22.8 15.6 23.5 17.2C24.2 15.6 26 14.5 28 14.5C31 14.5 33.5 17 33.5 20C33.5 24 29 27.5 25.5 30C29.5 29 33 31.5 33.5 35.5C34 39.5 30.5 42 27 42C24 42 22 40 21 38" stroke="url(#aboutOmGold)" stroke-width="2.8" stroke-linecap="round"/>
+                <path d="M14 21C14 17 17 14 20.5 14C23.5 14 25.5 16 26 18C26 21 24 23 22 24C19 25.5 15 28 15 32C15 37 19 41 24 41C29 41 33 37.5 34 33" stroke="url(#aboutOmGold)" stroke-width="2.8" stroke-linecap="round"/>
+                <path d="M29 9C32 9 35 10.5 36.5 12" stroke="url(#aboutOmGold)" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="37" cy="7.5" r="1.8" fill="#ffd54f"/>
+                <defs>
+                  <linearGradient id="aboutOmGold" x1="14" y1="7" x2="36" y2="42" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffe082"/>
+                    <stop offset="45%" stop-color="#ffb300"/>
+                    <stop offset="85%" stop-color="#ff6f00"/>
+                    <stop offset="100%" stop-color="#e65100"/>
+                  </linearGradient>
+                  <radialGradient id="aboutOmHalo" cx="24" cy="24" r="21" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffca28" stop-opacity="0.6"/>
+                    <stop offset="100%" stop-color="#ff6f00" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+              </svg>
+            </span>
+          </div>
+          <h3 class="thought-card-title">Rooted in the Holy City of Kashi (Varanasi)</h3>
+          <div class="thought-card-body">
+            <p>
+              Being situated in <strong>Varanasi near Lahartara</strong> provides a unique spiritual atmosphere that profoundly shapes my perspective. 
+              Kashi is the city of light, where the holy Ganges flows, where ancient temple bells echo in the twilight, and where the air is steeped in millennia of Bhakti and wisdom.
+            </p>
+            <p>
+              Walking these grounds while studying technology instills a sense of responsibility: that our modern creations should have soul, depth, 
+              and respect for our sacred heritage. This project is my humble tribute rooted in the soil of Varanasi.
+            </p>
+          </div>
+        </article>
+
+        <!-- Pillar 3: Learning at Sarthak Tech -->
+        <article class="thought-card">
+          <div class="thought-card-top">
+            <span class="thought-pillar-num">PILLAR 03</span>
+            <span class="thought-icon-symbol">
+              <svg class="devotional-svg-icon" viewBox="0 0 48 48" width="34" height="34" fill="none" aria-hidden="true">
+                <rect x="9" y="10" width="30" height="20" rx="2.5" fill="#0d1b2a" stroke="url(#aboutLaptopScreen)" stroke-width="2"/>
+                <rect x="11.5" y="12.5" width="25" height="15" rx="1" fill="#0a192f"/>
+                <path d="M17 17L14.5 20L17 23" stroke="#00e5ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M31 17L33.5 20L31 23" stroke="#00e5ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M25 16L23 24" stroke="#ff80ab" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M4 32H44L40 37H8L4 32Z" fill="url(#aboutLaptopBase)"/>
+                <rect x="21" y="32.5" width="6" height="1.8" rx="0.9" fill="#90caf9"/>
+                <defs>
+                  <linearGradient id="aboutLaptopScreen" x1="9" y1="10" x2="39" y2="30" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#80d8ff"/>
+                    <stop offset="50%" stop-color="#2979ff"/>
+                    <stop offset="100%" stop-color="#1565c0"/>
+                  </linearGradient>
+                  <linearGradient id="aboutLaptopBase" x1="4" y1="32" x2="44" y2="37" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#b0bec5"/>
+                    <stop offset="50%" stop-color="#cfd8dc"/>
+                    <stop offset="100%" stop-color="#78909c"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+          </div>
+          <h3 class="thought-card-title">Mastering Full Stack Development at Sarthak Tech</h3>
+          <div class="thought-card-body">
+            <p>
+              My journey as a student at <strong>SARTHAK TECH</strong> (near Sunbeam School, Lahartara) has been about turning passion into professional engineering capabilities. 
+              Learning full stack web development here taught me how to think critically about system architecture, performance, accessibility, and visual elegance.
+            </p>
+            <p>
+              Instead of relying on heavy pre-packaged templates, I challenge myself to craft custom CSS layouts, implement complex 3D parallax depth math, 
+              and design interactive elements from scratch. Sarthak Tech has given me the foundation to build applications that are both robust and visually mesmerizing.
+            </p>
+          </div>
+        </article>
+
+        <!-- Pillar 4: The Art of Cursor & Fluid Interaction -->
+        <article class="thought-card">
+          <div class="thought-card-top">
+            <span class="thought-pillar-num">PILLAR 04</span>
+            <span class="thought-icon-symbol">
+              <svg class="devotional-svg-icon" viewBox="0 0 48 48" width="34" height="34" fill="none" aria-hidden="true">
+                <path d="M10 42C18 34 26 22 36 6" stroke="#8d6e63" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M22 28C17 22 18 14 26 10C29 14 28 22 22 28Z" fill="url(#aboutFeatherGreen)"/>
+                <path d="M24 27C31 23 34 15 30 8C25 11 23 19 24 27Z" fill="url(#aboutFeatherGreen)"/>
+                <ellipse cx="27" cy="15" rx="6.5" ry="8" transform="rotate(25 27 15)" fill="#fbc02d"/>
+                <ellipse cx="27" cy="15" rx="4.5" ry="5.8" transform="rotate(25 27 15)" fill="#00e5ff"/>
+                <ellipse cx="27" cy="15" rx="2.8" ry="3.8" transform="rotate(25 27 15)" fill="#1a237e"/>
+                <circle cx="28" cy="13.5" r="0.9" fill="#ffffff"/>
+                <defs>
+                  <linearGradient id="aboutFeatherGreen" x1="18" y1="8" x2="34" y2="28" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#76ff03"/>
+                    <stop offset="45%" stop-color="#00e676"/>
+                    <stop offset="100%" stop-color="#00897b"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+          </div>
+          <h3 class="thought-card-title">Crafting Sacred Interactive Physics</h3>
+          <div class="thought-card-body">
+            <p>
+              A distinctive highlight of this portal is the <strong>Inverted Peacock Feather (Mayur Pankh) Quill Cursor</strong>. 
+              The peacock feather is Krishna's most sacred adornment. In this site, the precision writing nip serves as the pointer's head, 
+              delicately inclined at 20%, bringing an authentic antique quill pen feel to the screen.
+            </p>
+            <p>
+              Upon clicking, rather than a generic flash, a realistic <strong>submerging water droplet ripple pulse</strong> spreads across the viewport 
+              like a crystal drop entering sacred Yamuna waters. These subtle micro-interactions represent the synergy between code and emotion.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Technical Craftsmanship Matrix -->
+    <section class="about-craftsmanship-section">
+      <div class="section-headline-wrap">
+        <span class="section-eyebrow">
+          <svg class="eyebrow-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="url(#aboutBoltGrad)" stroke="#ffa000" stroke-width="1.2" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="aboutBoltGrad" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="25%" stop-color="#fff59d"/>
+                <stop offset="65%" stop-color="#ffd54f"/>
+                <stop offset="100%" stop-color="#ff9800"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>BEHIND THE CODE</span>
+        </span>
+        <h2 class="section-main-heading">CRAFTSMANSHIP &amp; ARCHITECTURE</h2>
+      </div>
+
+      <div class="craft-matrix-grid">
+        <div class="craft-card">
+          <div class="craft-icon-wrap">
+            <svg class="craft-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <h4>3D Depth Parallax Engine</h4>
+          <p>Multi-layered spatial arrangement where Lord Krishna's divine hands float in front of background typography, with intelligent proximity hover transparency.</p>
+        </div>
+
+        <div class="craft-card">
+          <div class="craft-icon-wrap">
+            <svg class="craft-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="6"></circle>
+              <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+          </div>
+          <h4>Water Submerge Ripple Physics</h4>
+          <p>Mathematical concentric wave simulation with cubic-bezier dampening, creating a lifelike droplet submersion effect with every mouse click.</p>
+        </div>
+
+        <div class="craft-card">
+          <div class="craft-icon-wrap">
+            <svg class="craft-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h4>Bilingual Leela Chronicles</h4>
+          <p>50 transcendental leelas authored with synchronized Hindi-English bilingual narratives, numerical indexing, and instant keyword searching.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Big Screen GitHub Showcase & Connect Banner -->
+    <section class="github-showcase-banner">
+      <div class="github-banner-left">
+        <svg class="github-big-logo" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+        </svg>
+        <div class="github-banner-text">
+          <h3>Explore My Code on GitHub</h3>
+          <p>I welcome you to inspect the source code, star the repository, or connect with me for full stack development collaborations.</p>
+          <span class="github-url-chip">https://github.com/kishan-src</span>
+        </div>
+      </div>
+
+      <div class="github-banner-right">
+        <a href="https://github.com/kishan-src" target="_blank" rel="noopener noreferrer" class="btn-github-large">
+          <span>OPEN GITHUB PROFILE</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Page Footer -->
+  <footer class="about-page-footer">
+    <p class="footer-maha-mantra">
+      "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे ।<br>
+      हरे राम हरे राम राम राम हरे हरे ॥"
+    </p>
+
+    <div class="footer-nav-links">
+      <a href="index.html" class="footer-nav-link">Home (Swagatam)</a>
+      <span style="color: rgba(255,255,255,0.3);">•</span>
+      <a href="about.html" class="footer-nav-link" style="color: #FFEAA7;">About Creator</a>
+      <span style="color: rgba(255,255,255,0.3);">•</span>
+      <a href="leelas.html" class="footer-nav-link">50 Sacred Leelas</a>
+      <span style="color: rgba(255,255,255,0.3);">•</span>
+      <a href="https://github.com/kishan-src" target="_blank" rel="noopener noreferrer" class="footer-nav-link">GitHub @kishan-src</a>
+    </div>
+
+    <p class="footer-copy-text">
+      Crafted with Bhakti &amp; Modern Web Craftsmanship by <strong>Kishan Rai</strong> • Full Stack Development Student at Sarthak Tech, Varanasi.
+    </p>
+  </footer>
+
+  <!-- Divine Flute Audio Track -->
+  <audio id="fluteAudio" preload="auto" loop>
+    <source src="https://res.cloudinary.com/acggupzy/video/upload/v1791861453/WhatsApp_Audio_2026-10-12_at_6.56.35_PM.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Custom Inverted Peacock Feather & Text White Dot Cursor -->
+  <div class="custom-cursor cursor-mode-feather" id="customCursor" aria-hidden="true">
+    <div class="cursor-feather" id="cursorFeather">
+      <img src="assets/peacock_feather_cursor.png" alt="Peacock Feather" class="feather-cursor-img">
+      <span class="feather-nip-sparkle"></span>
+    </div>
+    <div class="cursor-dot" id="cursorDot"></div>
+  </div>
+
+  <script src="about.js"></script>
+</body>
+</html>

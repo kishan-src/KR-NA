@@ -1,0 +1,12 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini
+
+# Editor directories & files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

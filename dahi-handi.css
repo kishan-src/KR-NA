@@ -1,0 +1,486 @@
+/* ==========================================================================
+   Krishna Dahi Handi & Spinning Flute Interactive Intro Experience
+   Features:
+   - Hanging Pot with gentle 10-20% left-right pendulum swing
+   - Curd slosh & spill droplets at swing endpoints (turn-around)
+   - Interactive click trigger with sacred flute smash
+   - Spinning flute flight trajectory with golden trail
+   - Ceramic pot shatter physics (shards, marigold petals, peacock feather)
+   - Massive creamy curd burst & fluid spill covering the bottom of the webpage
+   - Smooth seamless transition to Radha Krishna landing page
+   - Persistent bottom curd puddle & replay controls
+   ========================================================================== */
+
+/* Fullscreen Intro Overlay */
+.dahi-handi-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  background: radial-gradient(circle at 50% 32%, #0e172e 0%, #080d1c 45%, #03050a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s ease;
+  user-select: none;
+}
+
+.dahi-handi-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Background Cosmic Canvas for Floating Stardust & Curd Droplets */
+.handi-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Festive Top Marigold Garland Toran */
+.handi-garland-toran {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110px;
+  background-image: url('assets/garland_banner_clean.png');
+  background-repeat: repeat-x;
+  background-position: center top;
+  background-size: auto 95px;
+  filter: drop-shadow(0 6px 15px rgba(0, 0, 0, 0.6));
+  z-index: 25;
+  pointer-events: none;
+}
+
+/* Ambient Divine Aura behind the Hanging Pot */
+.handi-divine-aura {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: 520px;
+  height: 520px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 215, 80, 0.18) 0%, rgba(255, 170, 40, 0.08) 45%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(25px);
+  pointer-events: none;
+  z-index: 15;
+  animation: auraBreathe 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes auraBreathe {
+  0% {
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.14);
+    opacity: 1;
+  }
+}
+
+/* Hanging Pot Assembly Container (Pivot at top center of ropes) */
+.handi-pot-assembly {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 220px;
+  height: 420px;
+  transform-origin: 50% 0%;
+  transform: translateX(-50%) rotate(0deg);
+  z-index: 30;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: filter 0.3s ease;
+}
+
+.handi-pot-assembly:hover {
+  filter: drop-shadow(0 0 28px rgba(255, 215, 60, 0.75)) brightness(1.08);
+}
+
+/* Rhythmic Pendulum Swing Animation: ~12-14 degrees sway (~15-20% angle) */
+.handi-pot-assembly.swinging {
+  animation: potPendulum 2.7s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate;
+}
+
+@keyframes potPendulum {
+  0% {
+    transform: translateX(-50%) rotate(-13.5deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(13.5deg);
+  }
+}
+
+/* Freeze swing on smash impact */
+.handi-pot-assembly.frozen {
+  animation-play-state: paused;
+}
+
+/* The Pristine Dahi Handi Pot Image */
+.handi-pot-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  pointer-events: auto;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.7));
+}
+
+/* Pulsing Golden Glow Ring around the Pot Rim */
+.handi-rim-glow {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  width: 140px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.6) 0%, rgba(255, 215, 64, 0.25) 50%, transparent 80%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.7;
+  animation: rimPulse 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes rimPulse {
+  0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.95); }
+  100% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+/* User Call To Action Prompt Beneath the Pot */
+.handi-prompt-container {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 40;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.handi-prompt-container.hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+}
+
+.handi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  background: rgba(255, 215, 64, 0.12);
+  border: 1px solid rgba(255, 215, 64, 0.35);
+  border-radius: 999px;
+  color: #ffd875;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 12px rgba(255, 215, 64, 0.2);
+}
+
+.handi-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.4rem, 3.2vw, 2.2rem);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 215, 80, 0.4);
+  margin-bottom: 8px;
+}
+
+.handi-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.05em;
+  margin-bottom: 18px;
+}
+
+.handi-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, rgba(255, 215, 64, 0.25) 0%, rgba(230, 160, 20, 0.18) 100%);
+  border: 1.5px solid rgba(255, 215, 80, 0.55);
+  border-radius: 50px;
+  color: #fff9ea;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 200, 40, 0.3);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: ctaFloat 2.2s ease-in-out infinite alternate;
+}
+
+.handi-cta-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 225, 90, 0.45) 0%, rgba(240, 180, 30, 0.3) 100%);
+  border-color: rgba(255, 240, 150, 0.9);
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(255, 215, 80, 0.6);
+}
+
+@keyframes ctaFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+/* ==========================================================================
+   Spinning Flute Striker
+   ========================================================================== */
+.spinning-flute {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  top: -200px;
+  left: -200px;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transform-origin: center center;
+  filter: drop-shadow(0 0 25px rgba(255, 215, 60, 0.8));
+}
+
+.spinning-flute img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Trailing Golden Aura during Flute Flight */
+.spinning-flute::after {
+  content: '';
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 215, 64, 0.4) 0%, transparent 70%);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Divine Impact Flash & Screen Shake
+   ========================================================================== */
+.handi-impact-flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--flash-x, 50%) var(--flash-y, 38%), rgba(255, 255, 255, 0.95) 0%, rgba(255, 220, 120, 0.6) 35%, transparent 70%);
+  opacity: 0;
+  z-index: 60;
+  pointer-events: none;
+  transition: opacity 0.1s ease-out;
+}
+
+.handi-impact-flash.active {
+  opacity: 1;
+}
+
+.screen-shake {
+  animation: shakeEffect 0.32s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shakeEffect {
+  10%, 90% { transform: translate3d(-3px, 2px, 0); }
+  20%, 80% { transform: translate3d(5px, -4px, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 5px, 0); }
+  40%, 60% { transform: translate3d(6px, -3px, 0); }
+}
+
+/* ==========================================================================
+   Shattered Pot Shards & Debris Layer
+   ========================================================================== */
+.handi-shatter-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 45;
+  overflow: hidden;
+}
+
+.pot-shard {
+  position: absolute;
+  transform-origin: center center;
+  pointer-events: none;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+}
+
+.pot-shard img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Floating Peacock Feather */
+.flutter-feather {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  pointer-events: none;
+  z-index: 48;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+  will-change: transform, opacity;
+}
+
+.flutter-feather img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Marigold Flower Petals */
+.marigold-petal {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50% 0 50% 50%;
+  pointer-events: none;
+  z-index: 46;
+  will-change: transform, opacity;
+}
+
+/* ==========================================================================
+   Curd Spilled All Over The Bottom of Webpage
+   ========================================================================== */
+.curd-bottom-spill {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 190px;
+  pointer-events: none;
+  z-index: 99990;
+  overflow: visible;
+  display: block;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: transform 0.85s cubic-bezier(0.18, 0.89, 0.32, 1.15), opacity 0.5s ease-out;
+}
+
+.curd-bottom-spill.spilled {
+  opacity: 1;
+  transform: translateY(0%);
+}
+
+/* SVG Curd Layer Container */
+.curd-svg-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 -8px 24px rgba(255, 255, 255, 0.35));
+  will-change: transform, opacity;
+  transform-origin: bottom center;
+}
+
+/* ==========================================================================
+   Realistic Liquid Drainage & Physics Friction Sweep (Natural Fluid Flow)
+   ========================================================================== */
+
+/* Viscous trailing rivulets running downwards with friction */
+.curd-drain-rivulet {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  z-index: 99991;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 252, 242, 0.88) 55%, 
+    rgba(253, 246, 226, 0.35) 90%, 
+    transparent 100%);
+  border-radius: 999px;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+  will-change: transform, height, opacity;
+}
+
+/* Elongated sliding liquid tear droplets */
+.curd-sliding-drop {
+  position: absolute;
+  pointer-events: none;
+  z-index: 99992;
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #fffbf0 65%, #faedd0 100%);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.28));
+  will-change: transform, opacity;
+}
+
+/* Downward Sweep Droplet / Mist Particle */
+.sweep-drop-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99992;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.85);
+  will-change: transform, opacity;
+}
+
+/* Curd Splatter Droplets Pooled Along the Bottom Floor */
+.curd-floor-splats {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 768px) {
+  .handi-pot-assembly {
+    width: 175px;
+    height: 340px;
+  }
+
+  .handi-divine-aura {
+    width: 360px;
+    height: 360px;
+  }
+
+  .handi-garland-toran {
+    height: 75px;
+    background-size: auto 65px;
+  }
+
+  .curd-bottom-spill {
+    height: 140px;
+  }
+
+  .handi-prompt-container {
+    bottom: 8%;
+  }
+}
